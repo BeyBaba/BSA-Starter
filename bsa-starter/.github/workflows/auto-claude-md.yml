@@ -1,0 +1,219 @@
+name: Auto CLAUDE.md Generator
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'CLAUDE.md'
+      - 'README.md'
+  create:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-claude-md:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect stack and generate CLAUDE.md
+        shell: bash
+        run: |
+          # ── Stack tespiti ──────────────────────────────────────────
+          HAS_TS=false; HAS_NODE=false; HAS_ELECTRON=false
+          HAS_PYTHON=false; HAS_RUST=false; HAS_SWIFT=false
+          HAS_KOTLIN=false; HAS_FLUTTER=false; HAS_GO=false
+
+          [ -f "package.json" ]    && HAS_NODE=true
+          [ -f "tsconfig.json" ]   && HAS_TS=true
+          grep -q "electron" package.json 2>/dev/null && HAS_ELECTRON=true
+          [ -f "pyproject.toml" ] || [ -f "setup.py" ] && HAS_PYTHON=true
+          [ -f "Cargo.toml" ]      && HAS_RUST=true
+          [ -f "Package.swift" ]   && HAS_SWIFT=true
+          find . -name "build.gradle" | grep -q . && HAS_KOTLIN=true
+          [ -f "pubspec.yaml" ]    && HAS_FLUTTER=true
+          [ -f "go.mod" ]          && HAS_GO=true
+
+          # ── Proje adı ──────────────────────────────────────────────
+          REPO_NAME="${GITHUB_REPOSITORY##*/}"
+          OWNER="${GITHUB_REPOSITORY%%/*}"
+
+          # ── Stack listesi ──────────────────────────────────────────
+          STACK_LIST=""
+          BUMP_TABLE=""
+          BUILD_CMDS=""
+          VERSION_FILES=""
+          CHECKLIST=""
+
+          if $HAS_ELECTRON; then
+            STACK_LIST="$STACK_LIST\n├── desktop-app/       → Electron / TypeScript  (package.json)"
+            BUMP_TABLE="$BUMP_TABLE\n| \`desktop-app/\` (Electron) | **minor** | Yeni UI özelliği |"
+            BUILD_CMDS="$BUILD_CMDS\n### Electron → .exe\n\`\`\`bash\nnpm install && npm run dist\nls -lh dist/*.exe\n\`\`\`\n"
+            VERSION_FILES="$VERSION_FILES\n- \`package.json\` → \`\"version\": \"X.Y.Z\"\`"
+            CHECKLIST="$CHECKLIST\n- [ ] \`npm run dist\` hatasız tamamlandı mı?"
+          elif $HAS_TS && $HAS_NODE; then
+            STACK_LIST="$STACK_LIST\n├── src/               → TypeScript / React  (package.json)"
+            BUMP_TABLE="$BUMP_TABLE\n| \`src/\` (TypeScript) | **patch** | UI düzeltmeleri |"
+            BUILD_CMDS="$BUILD_CMDS\n### TypeScript / React\n\`\`\`bash\nnpm install && npm run build\n\`\`\`\n"
+            VERSION_FILES="$VERSION_FILES\n- \`package.json\` → \`\"version\": \"X.Y.Z\"\`"
+            CHECKLIST="$CHECKLIST\n- [ ] \`npm run build\` hatasız tamamlandı mı?"
+          elif $HAS_NODE; then
+            STACK_LIST="$STACK_LIST\n├── src/               → Node.js  (package.json)"
+            BUMP_TABLE="$BUMP_TABLE\n| \`src/\` (Node.js) | **patch** | Küçük düzeltmeler |"
+            BUILD_CMDS="$BUILD_CMDS\n### Node.js\n\`\`\`bash\nnpm install && npm start\n\`\`\`\n"
+            VERSION_FILES="$VERSION_FILES\n- \`package.json\` → \`\"version\": \"X.Y.Z\"\`"
+          fi
+
+          if $HAS_PYTHON; then
+            STACK_LIST="$STACK_LIST\n├── backend/           → Python  (pyproject.toml)"
+            BUMP_TABLE="$BUMP_TABLE\n| \`backend/\` (Python) | **minor** | Yeni endpoint/servis |"
+            BUILD_CMDS="$BUILD_CMDS\n### Python\n\`\`\`bash\npip install build && python -m build\nls -lh dist/\n\`\`\`\n"
+            VERSION_FILES="$VERSION_FILES\n- \`pyproject.toml\` → \`version = \"X.Y.Z\"\`"
+            CHECKLIST="$CHECKLIST\n- [ ] \`pytest\` geçiyor mu?"
+          fi
+
+          if $HAS_RUST; then
+            STACK_LIST="$STACK_LIST\n├── src/               → Rust  (Cargo.toml)"
+            BUMP_TABLE="$BUMP_TABLE\n| \`src/\` (Rust) | **patch** | Performans/güvenlik |"
+            BUILD_CMDS="$BUILD_CMDS\n### Rust\n\`\`\`bash\ncargo build --release\ncargo test\nls -lh target/release/\n\`\`\`\n"
+            VERSION_FILES="$VERSION_FILES\n- \`Cargo.toml\` → \`version = \"X.Y.Z\"\`"
+            CHECKLIST="$CHECKLIST\n- [ ] \`cargo test\` geçiyor mu?"
+          fi
+
+          if $HAS_SWIFT; then
+            STACK_LIST="$STACK_LIST\n├── mobile/            → Swift  (Package.swift)"
+            BUMP_TABLE="$BUMP_TABLE\n| \`mobile/\` (Swift) | **minor** | iOS özellik eklemeleri |"
+            BUILD_CMDS="$BUILD_CMDS\n### Swift / iOS\n\`\`\`bash\nxcodebuild -scheme AppName -configuration Release archive\n\`\`\`\n"
+            VERSION_FILES="$VERSION_FILES\n- \`App/Info.plist\` → \`CFBundleShortVersionString\`"
+            CHECKLIST="$CHECKLIST\n- [ ] Xcode build hatasız tamamlandı mı?"
+          fi
+
+          if $HAS_KOTLIN; then
+            STACK_LIST="$STACK_LIST\n├── android/           → Kotlin  (build.gradle)"
+            BUMP_TABLE="$BUMP_TABLE\n| \`android/\` (Kotlin) | **patch** | Android uyumluluk |"
+            BUILD_CMDS="$BUILD_CMDS\n### Android\n\`\`\`bash\n./gradlew bundleRelease\nls -lh app/build/outputs/\n\`\`\`\n"
+            VERSION_FILES="$VERSION_FILES\n- \`app/build.gradle\` → \`versionName \"X.Y.Z\"\`"
+            CHECKLIST="$CHECKLIST\n- [ ] \`./gradlew test\` geçiyor mu?"
+          fi
+
+          if $HAS_FLUTTER; then
+            STACK_LIST="$STACK_LIST\n├── lib/               → Flutter / Dart  (pubspec.yaml)"
+            BUMP_TABLE="$BUMP_TABLE\n| \`lib/\` (Flutter) | **minor** | Yeni ekran/özellik |"
+            BUILD_CMDS="$BUILD_CMDS\n### Flutter\n\`\`\`bash\nflutter build apk --release\nflutter build ios --release\n\`\`\`\n"
+            VERSION_FILES="$VERSION_FILES\n- \`pubspec.yaml\` → \`version: X.Y.Z+build\`"
+            CHECKLIST="$CHECKLIST\n- [ ] \`flutter test\` geçiyor mu?"
+          fi
+
+          if $HAS_GO; then
+            STACK_LIST="$STACK_LIST\n├── cmd/               → Go  (go.mod)"
+            BUMP_TABLE="$BUMP_TABLE\n| \`cmd/\` (Go) | **patch** | Hata düzeltme |"
+            BUILD_CMDS="$BUILD_CMDS\n### Go\n\`\`\`bash\ngo build ./...\ngo test ./...\n\`\`\`\n"
+            VERSION_FILES="$VERSION_FILES\n- \`go.mod\` → module version"
+            CHECKLIST="$CHECKLIST\n- [ ] \`go test ./...\` geçiyor mu?"
+          fi
+
+          # ── CLAUDE.md yaz ──────────────────────────────────────────
+          cat > CLAUDE.md << CLAUDEOF
+# CLAUDE.md — ${REPO_NAME}
+
+Bu dosya Claude'un proje kurallarını otomatik okuduğu yapılandırma dosyasıdır.
+Her session başında ve release öncesinde bu dosya okunur.
+> Otomatik oluşturuldu: $(date '+%Y-%m-%d') · GitHub Actions
+
+---
+
+## 📁 Proje Yapısı
+
+\`\`\`
+${REPO_NAME}/
+$(echo -e "$STACK_LIST")
+└── CLAUDE.md              ← bu dosya
+\`\`\`
+
+**GitHub:** https://github.com/${GITHUB_REPOSITORY}
+**Owner:** ${OWNER}
+
+---
+
+## 🔢 Versiyon Kuralları
+
+### Bump Stratejisi
+
+| Modül | Bump Tipi | Açıklama |
+|-------|-----------|----------|
+$(echo -e "$BUMP_TABLE")
+
+### Global Tag Kuralı
+
+Tüm modüller aynı Git tag'ini paylaşır: \`vX.Y.Z\`
+Tag, **en yüksek bump tipine** göre belirlenir.
+
+### Versiyon Dosyaları
+$(echo -e "$VERSION_FILES")
+
+---
+
+## 🚀 Release Kuralları
+
+1. Sadece \`main\` branch'inden release çık.
+2. Test geçmeden release yapma.
+3. \`chore:\` veya \`release:\` prefix'li commit → release tetikler.
+4. GitHub Release'e artifact ekle (build çıktısı varsa).
+5. Release notes: son commit mesajlarından oluştur.
+
+---
+
+## 🔨 Build Komutları
+
+$(echo -e "$BUILD_CMDS")
+
+---
+
+## 📝 Commit Mesajı Formatı
+
+\`\`\`
+feat:     Yeni özellik
+fix:      Bug düzeltme
+chore:    Versiyon / config değişikliği
+docs:     Sadece dokümantasyon
+refactor: Kod yeniden düzenleme
+perf:     Performans iyileştirmesi
+security: Güvenlik yaması
+test:     Test ekleme / düzenleme
+\`\`\`
+
+---
+
+## ⚙️ Ortam Değişkenleri
+
+\`\`\`bash
+GITHUB_TOKEN=...   # gh auth login ile set et
+REPO=${GITHUB_REPOSITORY}
+\`\`\`
+
+---
+
+## 📋 Release Öncesi Kontrol Listesi
+
+- [ ] \`main\` branch'inde miyiz?
+- [ ] Tüm modüllerde versiyon eşlendi mi?
+$(echo -e "$CHECKLIST")
+- [ ] \`CHANGELOG.md\` güncellendi mi?
+- [ ] GitHub Release artifact'ları hazır mı?
+CLAUDEOF
+
+          echo "✅ CLAUDE.md oluşturuldu"
+          cat CLAUDE.md
+
+      - name: Commit CLAUDE.md
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CLAUDE.md
+          git diff --staged --quiet && echo "Değişiklik yok, skip" && exit 0
+          git commit -m "chore: auto-generate CLAUDE.md [skip ci]"
+          git push

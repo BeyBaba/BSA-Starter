@@ -1,0 +1,46 @@
+# Node
+node_modules/
+dist/
+build/
+.next/
+.env
+.env.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+dist/
+*.egg-info/
+.pytest_cache/
+
+# Rust
+target/
+
+# Swift / Xcode
+*.xcworkspace/
+*.xcuserdata/
+DerivedData/
+.build/
+
+# Android
+.gradle/
+local.properties
+*.apk
+*.aab
+
+# Flutter
+.dart_tool/
+*.g.dart
+
+# Go
+vendor/
+
+# Genel
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
