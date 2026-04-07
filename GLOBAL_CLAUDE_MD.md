@@ -4,6 +4,12 @@ GLOBAL CLAUDE.MD KURALLARI — v2.12
 
 SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.12 aktif" bildir.
 
+EVRENSEL KURAL ÇEKME: Her yeni session'da bu dosyayı oku:
+
+https://raw.githubusercontent.com/BeyBaba/BSA-Starter/main/GLOBAL_CLAUDE_MD.md
+
+Erişilemezse kullanıcıya bildir, session'a devam et ama uyar.
+
 GÜNCELLEME: "CLAUDE.md güncelle" denildiğinde içeriği /home/user/.claude/CLAUDE.md'ye yaz (Windows path'i DEĞİL), head -1 ile doğrula.
 
 TOKEN GÜVENLİK: Token ASLA chat'e/dosyaya yazılmaz. Gerekirse terminalde çalıştırılacak komut ver.
