@@ -1,8 +1,8 @@
-GLOBAL CLAUDE.MD KURALLARI — v2.11
+GLOBAL CLAUDE.MD KURALLARI — v2.12
 
 === BÖLÜM A — HER ZAMAN GEÇERLİ (tetikleme gerektirmez) ===
 
-SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.11 aktif" bildir.
+SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.12 aktif" bildir.
 
 GÜNCELLEME: "CLAUDE.md güncelle" denildiğinde içeriği /home/user/.claude/CLAUDE.md'ye yaz (Windows path'i DEĞİL), head -1 ile doğrula.
 
@@ -26,6 +26,18 @@ PLACEHOLDER YASAK: ASLA {VERSION} gibi placeholder bırakma, gerçek değer yaz.
 
 YEDEK: "yedek al" denildiğinde seçenek sun (Git tag/ZIP/ikisi). ZIP yolu: /mnt/g/Drive'ım/AAA_Projeler/Aa Projeler Backup/
 
+DÜRÜSTLÜK ÖNCELİKLİ GELİŞTİRME:
+- PWA'da teknik olarak YAPILAMAYAN özellik (Tor, BLE, WiFi Direct, OS-level screenshot block vb.) ASLA arayüze eklenmez. Kullanıcıyı yanıltma.
+- Her özellik eklendiğinde "Bu gerçekten çalışıyor mu?" sorusuna kanıtla (test/log/ekran görüntüsü) cevap ver.
+- Kod yazıldı ama aktif edilmediyse açıkça bildir: "DİKKAT: Bu modül yazıldı ama aktif değil, aktivasyon için şu adımlar lazım..."
+- ASLA "bitti" deme, eğer özellik test edilip çalıştığı doğrulanmadıysa.
+- Platform kısıtı varsa (web vs native) EN BAŞTA söyle, sonraya bırakma.
+- Arayüzde toggle/buton/gösterge varsa, arkasında gerçek çalışan kod OLMALIDIR. Sadece UI olan özellik YASAKTIR.
+- Özellik tamamlandığında şu formatla rapor ver:
+  ✅ ÇALIŞIYOR: [özellik adı] — [test kanıtı]
+  ⚠️ YAZILDI AMA AKTİF DEĞİL: [özellik adı] — [aktivasyon adımları]
+  ❌ BU PLATFORMDA İMKANSIZ: [özellik adı] — [neden + hangi platformda yapılabilir]
+
 === BÖLÜM B — TETİKLEMELİ (kullanıcı istediğinde) ===
 Tetikleme: "global kurallara bak", "kuralları uygula", "eksikleri tara" vb.
 Projede CLAUDE.md varsa → Blok 0 / Yoksa → Blok 1
@@ -35,7 +47,11 @@ BLOK 0 — ESKİ PROJE
 0b: Yedek öner (tag/ZIP/ikisi/gerek yok)
 0c: Kabul ederse yedek al. Tag 403→token scope uyar.
 0d: CLAUDE.md'yi global kurallarla karşılaştır→eksikleri listele→ONAY AL→uygula
-0e: Durum raporu: özellikler, eksikler, diğer projelerdeki çözümler, bug/crash→"hangisiyle devam?" sor, seçene kadar DURMA
+0e: Durum raporu: özellikler, eksikler, diğer projelerdeki çözümler, bug/crash→"hangisiyle devam?" sor, seçene kadar DURMA. Her özelliği şu şekilde sınıfla:
+  ✅ ÇALIŞIYOR — test edildi, aktif
+  ⚠️ KOD VAR AMA AKTİF DEĞİL — aktivasyon adımlarını listele
+  ❌ BU PLATFORMDA İMKANSIZ — kaldır veya "native roadmap"e taşı
+  Arada kalan kod bırakma. Ya aktif et, ya kaldır, ya roadmap'e taşı.
 
 BLOK 0.5 — SKİLL ÖNERİLERİ
 npx skills list ile kontrol et. Antigravity skill'leri:
@@ -50,6 +66,10 @@ Mobil/Web/Masaüstü/Mobil+Web/Backend-API/CLI-Bot-Otomasyon
 
 BLOK 2 — FİKİR TOPLAMA + TEKNOLOJİ
 Kullanıcı anlatır→Claude sorar→"tamam" denince stack öner→onay al. README.md oluştur.
+Platform seçildikten sonra, istenen HER özelliği şu şekilde sınıfla:
+  ✅ BU PLATFORMDA YAPILABİLİR — hemen geliştirmeye dahil et
+  ❌ NATİVE GEREKTİRİR — PWA/web arayüzüne KOYMA, ayrı "Native Roadmap" dokümanına yaz
+Native gerektiren özellikleri ASLA "sonra aktif ederiz" diyerek arayüze ekleme. Ayrı bir NATIVE_ROADMAP.md dosyasına yaz, kullanıcıya göster, onay al.
 
 BLOK 3 — DEPLOY
 Vercel(önerilen)/Netlify/EAS/GitHub Pages/VPS
