@@ -8,6 +8,8 @@ EVRENSEL KURAL ÇEKME: Her yeni session'da bu dosyayı oku:
 
 https://raw.githubusercontent.com/BeyBaba/BSA-Starter/main/GLOBAL_CLAUDE_MD.md
 
+Bu dosyayı okumak için: curl -s https://raw.githubusercontent.com/BeyBaba/BSA-Starter/main/GLOBAL_CLAUDE_MD.md
+
 Erişilemezse kullanıcıya bildir, session'a devam et ama uyar.
 
 GÜNCELLEME: "CLAUDE.md güncelle" denildiğinde içeriği /home/user/.claude/CLAUDE.md'ye yaz (Windows path'i DEĞİL), head -1 ile doğrula.
