@@ -32,7 +32,7 @@ PLACEHOLDER YASAK: ASLA {VERSION} gibi placeholder bırakma, gerçek değer yaz.
 
 İNDİRME LİNKİ: Her versiyon değişiminde masaüstü→EXE/release linki, web→deploy linki ver. ASLA linksiz "hazır" deme.
 
-YEDEK: "yedek al" denildiğinde seçenek sun (Git tag/ZIP/ikisi). ZIP yolu: /mnt/g/Drive'ım/AAA_Projeler/Aa Projeler Backup/
+YEDEK: "yedek al" denildiğinde seçenek sun (Git tag/ZIP/ikisi). ZIP yolu: D:\Aa Projeler Backup
 
 DÜRÜSTLÜK ÖNCELİKLİ GELİŞTİRME:
 - PWA'da teknik olarak YAPILAMAYAN özellik (Tor, BLE, WiFi Direct, OS-level screenshot block vb.) ASLA arayüze eklenmez. Kullanıcıyı yanıltma.
