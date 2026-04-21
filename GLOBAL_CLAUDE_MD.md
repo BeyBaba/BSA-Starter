@@ -204,3 +204,20 @@ Her yeni proje ve mevcut projelerde Material Design 3 uygulanır:
   EasyRide → #1565C0 (koyu mavi)
   BİLSAV → #1e1e78 (marka rengi)
   VoiceFlow → #37474F (koyu gri/slate)
+
+  $addition = @'
+
+BLOK 21 — PWA GÜNCELLEME BİLDİRİMİ
+Her PWA projesinde service worker güncelleme bildirimi ZORUNLU:
+- Service worker yeni versiyon tespit edince kullanıcıya toast/banner göster
+- Mesaj: "🆕 Yeni güncelleme mevcut! Yenilemek için tıkla"
+- Tıklanınca: skipWaiting() + clients.claim() + window.location.reload()
+- Cache versiyonlama: CACHE_NAME = 'app-v{versiyon}' formatı
+- Yeni deploy = eski cache otomatik temizlenir
+- Güncelleme bildirimi dismiss edilemez — kullanıcı MUTLAKA güncellemeli
+- Güncelleme bildirimi her sayfada görünür (fixed, üstte veya altta)
+- Arka plan karartılır, sadece "Güncelle" butonu aktif (modal stili)
+'@
+
+Add-Content -Path "$env:USERPROFILE\.claude\CLAUDE.md" -Value $addition -Encoding UTF8
+Get-Content "$env:USERPROFILE\.claude\CLAUDE.md" | Select-Object -Last 5
