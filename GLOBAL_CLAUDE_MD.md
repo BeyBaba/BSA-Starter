@@ -185,3 +185,22 @@ Super user listesi: desktop-app/ui/home.html içinde SUPER_USERS array'inde tan�
 
 BLOK 19 — README
 Her projede README.md zorunlu: proje açıklaması, kurulum, özellikler listesi, teknoloji stack'i.
+
+BLOK 20 — MATERIAL YOU TASARIM SİSTEMİ
+Her yeni proje ve mevcut projelerde Material Design 3 uygulanır:
+- npm install @material/material-color-utilities
+- Seed color'dan generateScheme() ile tam palet üret
+- Dark + Light scheme token'larını CSS variables olarak yaz
+- Tonally surface'ler: surface, surfaceVariant, surfaceContainer katmanları
+- Yumuşak renk geçişleri, pastel tonlar — tek düz renk YASAK
+- Primary: yumuşak/pastel ton, canlı primary rengi değil
+- Kartlar: surfaceContainer rengi (koyu modda koyu ton, açık modda açık ton)
+- Rounded corners: 16-28px ZORUNLU
+- Elevation yerine tonal color ile derinlik
+- Kontrast oranı min 4.5:1 ZORUNLU
+- Her proje için seed color:
+  GhostX → #2d7a4f (koyu yeşil/teal)
+  ADHD Killer Pro → #6750A4 (Material You varsayılan mor/indigo)
+  EasyRide → #1565C0 (koyu mavi)
+  BİLSAV → #1e1e78 (marka rengi)
+  VoiceFlow → #37474F (koyu gri/slate)
