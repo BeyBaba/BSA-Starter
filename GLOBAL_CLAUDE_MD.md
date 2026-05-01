@@ -54,7 +54,7 @@ DÜRÜSTLÜK ÖNCELİKLİ GELİŞTİRME:
   ⚠️ YAZILDI AMA AKTİF DEĞİL: [özellik adı] — [aktivasyon adımları]
   ❌ BU PLATFORMDA İMKANSIZ: [özellik adı] — [neden + hangi platformda yapılabilir]
 
-VERSİYON GÖRÜNÜRLÜĞܺ Her projede kullanıcı-yüzlü bir yerde (login/landing/about ekranı) vX.Y.Z etiketi göster.
+VERSİYON GÖRÜNÜRLÜĞܺÜ Her projede kullanıcı-yüzlü bir yerde (login/landing/about ekranı) vX.Y.Z etiketi göster.
 Versiyon tek doğruluk kaynağından (package.json veya eşdeğer) otomatik okunsun — elle senkron tutma yok.
 Görünüm: küçük, diskret, monospace, textMuted renk.
 
