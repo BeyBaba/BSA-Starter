@@ -10,8 +10,6 @@ Erişilemezse kullanıcıya bildir, session'a devam et ama uyar.
 
 GÜNCELLEME: "CLAUDE.md güncelle" denildiğinde içeriği C:\Users\BSA\.claude\CLAUDE.md'ye yaz, Get-Content ... | Select-Object -First 3 ile doğrula.
 
-TOKEN GÜVENLİK: Token ASLA chat'e/dosyaya yazılmaz. Gerekirse terminalde çalıştırılacak komut ver.
-
 GİZLİ DOSYA: .env, credentials, API key ASLA commit edilmez. .gitignore zorunlu:
 node_modules/ .next/ .env .env.local dist/ build/ .DS_Store *.log coverage/
 
