@@ -130,7 +130,7 @@ BLOK 6 — BUILD/DEPLOY
 npx tsc --noEmit zorunlu. Önce otomatik dene, yapamazsan komut ver.
 
 BLOK 7 — MOBİL
-rs()/rFont() 375px ref, dokunma hedefi min 44px, viewport meta, zoom engelleme.
+rs()/rFont() 375px ref, dokunma hedefi min 44px, viewport meta.
 Platform algıla → farklı UX: mobilde native gibi (tam ekran, gesture, bottom nav), webde web gibi (sidebar, hover, geniş layout).
 Haptic feedback: tüm butonlarda navigator.vibrate().
 
@@ -185,7 +185,7 @@ BLOK 19 — README
 Her projede README.md zorunlu: proje açıklaması, kurulum, özellikler listesi, teknoloji stack'i.
 
 BLOK 20 — MATERIAL YOU TASARIM SİSTEMİ
-Her yeni proje ve mevcut projelerde Material Design 3 uygulanır:
+Her yeni proje ve mevcut projelerde Material U Design 3 uygulanır:
 - npm install @material/material-color-utilities
 - Seed color'dan generateScheme() ile tam palet üret
 - Dark + Light scheme token'larını CSS variables olarak yaz
@@ -197,6 +197,8 @@ Her yeni proje ve mevcut projelerde Material Design 3 uygulanır:
 - Elevation yerine tonal color ile derinlik
 - Kontrast oranı min 4.5:1 ZORUNLU
 - Her proje için seed color:
+- Bouncy effect
+- Clickable button
   GhostX → #2d7a4f (koyu yeşil/teal)
   ADHD Killer Pro → #6750A4 (Material You varsayılan mor/indigo)
   EasyRide → #1565C0 (koyu mavi)
