@@ -1,8 +1,8 @@
-GLOBAL CLAUDE.MD KURALLARI — v2.14
+GLOBAL CLAUDE.MD KURALLARI — v2.15
 
 === BÖLÜM A — HER ZAMAN GEÇERLİ (tetikleme gerektirmez) ===
 
-SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.14 aktif" bildir.
+SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.15 aktif" bildir.
 
 EVRENSEL KURAL ÇEKME: Her yeni session'da bu dosyayı oku:
 https://raw.githubusercontent.com/BeyBaba/BSA-Starter/main/GLOBAL_CLAUDE_MD.md
@@ -45,6 +45,12 @@ YEDEK: "yedek al" denildiğinde seçenek sun (Git tag/ZIP/ikisi). ZIP yolu: D:\B
 OTONOM GİT AKIŞI: Kodlama görevlerinde her adım için ayrı onay bekleme.
 Akış: branch → commit → push → PR → semver bump → Türkçe commit mesajı → CI yeşil → merge.
 Tek zorunluluk: build + typecheck temiz olmadan push YOK.
+
+OTONOM MERGE (v2.15): Testten (build + typecheck + UI testi) geçen PR'ı kullanıcıya
+sormadan squash merge et. Yalnızca emin olunamayan / mimari kararlarda dur ve danış.
+
+UI TESTİ ZORUNLU (v2.15): Her UI/davranış değişikliğinde headless Chromium (Playwright) ile
+testi çalıştır; mümkünse ekran görüntüsüyle doğrula. Görsel/test kanıtı olmadan "çalışıyor" deme.
 
 PR ZORUNLULUĞU: main branch'e direkt push YASAK. Her zaman PR üzerinden squash merge.
 
@@ -142,6 +148,9 @@ ZORUNLU: Vercel+Supabase(PostgreSQL)
 BLOK 4 — VERSİYON
 Semantic versioning (major.minor.patch). package.json'dan oku, tüm dosyalarda güncelle. Major öncesi ZIP yedek.
 GitHub Releases: her versiyon geçişinde release oluştur, changelog yaz.
+ÇİFT HANELİ MİNÖR YOK (v2.15): Minör 9'a geldiyse (örn. 1.9.x) sonraki özellik sürümü
+1.10.0 DEĞİL, doğrudan bir üst BÜYÜK olur (örn. 2.0.0). Boşuna/simgesel sürüm çıkarma —
+sürümü gerçek bir değişiklikle çıkar. Kararsız kaldığında sürüm tipini kullanıcıya sor.
 
 BLOK 5 — PR/MERGE
 main'e direkt push YASAK. claude/branch → PR → squash merge.
@@ -250,6 +259,11 @@ Her PWA projesinde service worker güncelleme bildirimi ZORUNLU:
 - Güncelleme bildirimi dismiss edilemez — kullanıcı MUTLAKA güncellemeli
 - Güncelleme bildirimi her sayfada görünür (fixed, üstte veya altta)
 - Arka plan karartılır, sadece "Güncelle" butonu aktif (modal stili)
+- PUSH POLİTİKASI (v2.15): Kapalıyken gönderilen "yeni sürüm" push'u yalnızca ORTA/BÜYÜK
+  (minor/major) sürümlerde atılır. KÜÇÜK (patch) sürümlerde push GÖNDERME — patch yalnızca
+  açılıştaki görünür güncelleme modaliyle duyurulur. Sebep: sık deploy'da her patch'te push
+  kullanıcıyı bunaltır ve bildirimleri komple kapattırır (asıl bildirimler de kaybolur).
+- Görünür güncelleme modali HER sürümde, bildirim izninden BAĞIMSIZ gösterilir.
 '@
 
 Add-Content -Path "$env:USERPROFILE\.claude\CLAUDE.md" -Value $addition -Encoding UTF8
