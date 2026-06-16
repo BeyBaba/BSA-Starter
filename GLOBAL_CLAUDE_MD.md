@@ -14,6 +14,12 @@ geçmiş projelerden çıkarılmış dersleri (L-XXXX) dikkate al ve aynı hatay
 Bu dosyalara erişilemezse tek satır bildir ("⚠️ Hafıza okunamadı, devam ediyorum") ve
 session'a devam et — ASLA bloklama. Ayrı BigBrain / Unified-Learning-System reposu tutma.
 
+DERS YAZ — GERİ YAZMA (v2.15): Hafıza tek yönlü değil. Önemli bir bug/çözüm, tekrar eden bir
+hata ya da genelleştirilebilir bir karar çıktığında oturum sonunda Claude-Memory/lessons'a yeni
+bir L-XXXX kaydı ekle ve lessons/INDEX.md'yi güncelle (kısa: belirti → kök neden → kural/çözüm).
+Aynı dersi iki kez yazma — varsa güncelle. Bu adım TÜM projelerde geçerlidir; okuma otomatik
+(hook), yazma bu kuralla sağlanır.
+
 RETROAKTİF KURAL UYARISI (v2.14): Yeni bir global kural (yazıldığı sürümden eski) bir
 projede sağlanmıyorsa KENDİLİĞİNDEN düzeltme YAPMA. Tek satır uyar ve onay iste:
 "⚠️ Bu proje eski kural sürümüyle yazılmış; v2.14 şu maddeleri ekledi: [liste]. Uygulayayım mı?"
@@ -76,6 +82,13 @@ DÜRÜSTLÜK ÖNCELİKLİ GELİŞTİRME:
   ✅ ÇALIŞIYOR: [özellik adı] — [test kanıtı]
   ⚠️ YAZILDI AMA AKTİF DEĞİL: [özellik adı] — [aktivasyon adımları]
   ❌ BU PLATFORMDA İMKANSIZ: [özellik adı] — [neden + hangi platformda yapılabilir]
+
+DEBUG RAPOR FORMATI (v2.15): Bir bug çözüldüğünde şu başlıklarla raporla:
+  - Bug neydi ve neden oluyordu
+  - Çözüm
+  - Kanıt (test/log/ekran görüntüsü)
+  - Test geçti, kuralımız gereği merge ediyorum (OTONOM MERGE'e göre)
+  - Bu turda çözülenler (kısa özet liste)
 
 VERSİYON GÖRÜNÜRLÜĞܺÜ Her projede kullanıcı-yüzlü bir yerde (login/landing/about ekranı) vX.Y.Z etiketi göster.
 Versiyon tek doğruluk kaynağından (package.json veya eşdeğer) otomatik okunsun — elle senkron tutma yok.
