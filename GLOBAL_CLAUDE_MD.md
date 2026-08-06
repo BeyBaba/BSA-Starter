@@ -1,21 +1,21 @@
-GLOBAL CLAUDE.MD KURALLARI — v2.15
+GLOBAL CLAUDE.MD KURALLARI — v2.17
 
 === BÖLÜM A — HER ZAMAN GEÇERLİ (tetikleme gerektirmez) ===
 
-SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.15 aktif" bildir.
+SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.17 aktif" bildir.
 
 EVRENSEL KURAL ÇEKME: Her yeni session'da bu dosyayı oku:
 https://raw.githubusercontent.com/BeyBaba/BSA-Starter/main/GLOBAL_CLAUDE_MD.md
 Erişilemezse kullanıcıya bildir, session'a devam et ama uyar.
 
-HAFIZA TEK KAYNAĞI (v2.14): Tüm projeler-arası hafıza tek repoda: BeyBaba/Claude-Memory.
-Her yeni session'da Claude-Memory/projects/INDEX.md + Claude-Memory/lessons/INDEX.md oku;
+HAFIZA TEK KAYNAĞI (v2.14): Tüm projeler-arası hafıza tek repoda: BeyBaba/BigBrain.
+Her yeni session'da BigBrain/projects/INDEX.md + BigBrain/lessons/INDEX.md oku;
 geçmiş projelerden çıkarılmış dersleri (L-XXXX) dikkate al ve aynı hatayı tekrarlama.
 Bu dosyalara erişilemezse tek satır bildir ("⚠️ Hafıza okunamadı, devam ediyorum") ve
-session'a devam et — ASLA bloklama. Ayrı BigBrain / Unified-Learning-System reposu tutma.
+session'a devam et — ASLA bloklama. Ayrı Claude-Memory / Unified-Learning-System reposu tutma (bunlar eski hafıza repolarıydı — arşivlendi).
 
 DERS YAZ — GERİ YAZMA (v2.15): Hafıza tek yönlü değil. Önemli bir bug/çözüm, tekrar eden bir
-hata ya da genelleştirilebilir bir karar çıktığında oturum sonunda Claude-Memory/lessons'a yeni
+hata ya da genelleştirilebilir bir karar çıktığında oturum sonunda BigBrain/lessons'a yeni
 bir L-XXXX kaydı ekle ve lessons/INDEX.md'yi güncelle (kısa: belirti → kök neden → kural/çözüm).
 Aynı dersi iki kez yazma — varsa güncelle. Bu adım TÜM projelerde geçerlidir; okuma otomatik
 (hook), yazma bu kuralla sağlanır.
@@ -260,7 +260,6 @@ Her yeni proje ve mevcut projelerde Material U Design 3 uygulanır:
   BİLSAV → #1e1e78 (marka rengi)
   VoiceFlow → #37474F (koyu gri/slate)
 
-  $addition = @'
 
 BLOK 21 — PWA GÜNCELLEME BİLDİRİMİ
 Her PWA projesinde service worker güncelleme bildirimi ZORUNLU:
@@ -277,7 +276,21 @@ Her PWA projesinde service worker güncelleme bildirimi ZORUNLU:
   açılıştaki görünür güncelleme modaliyle duyurulur. Sebep: sık deploy'da her patch'te push
   kullanıcıyı bunaltır ve bildirimleri komple kapattırır (asıl bildirimler de kaybolur).
 - Görünür güncelleme modali HER sürümde, bildirim izninden BAĞIMSIZ gösterilir.
-'@
 
-Add-Content -Path "$env:USERPROFILE\.claude\CLAUDE.md" -Value $addition -Encoding UTF8
-Get-Content "$env:USERPROFILE\.claude\CLAUDE.md" | Select-Object -Last 5
+
+BLOK 22 — OTOMATİK RELEASE VE SEMVER KURALI (v2.17)
+Her anlamlı değişiklik grubu (yeni özellik, bug fix, refactor) tamamlandığında:
+1. Conventional commit at (feat:/fix:/chore:/refactor:/docs:/test:)
+2. package.json versiyonunu semver'e göre yükselt:
+   - Başlangıç kuralı: Her yeni proje veya MVP'ye ulaşmış proje 1.0.0'dan başlar.
+     0.x sürümleri yalnızca ilk 3 gün deneme aşamasında geçici kabul.
+   - feat: -> MINOR bump (1.0.0 -> 1.1.0)
+   - fix: -> PATCH bump (1.0.0 -> 1.0.1)
+   - BREAKING CHANGE: footer -> MAJOR bump (1.0.0 -> 2.0.0)
+   - Sadece docs:/test:/refactor: -> versiyon bump YOK
+3. CHANGELOG.md'ye Keep a Changelog formatında ekle
+4. main'e DOĞRUDAN push YASAK — feature branch -> PR -> kullanıcıya URL
+5. PR merge sonrası: git tag vX.Y.Z, push, gh release create
+6. auto-release skill'i varsa onu kullan
+7. Kullanıcıya release özeti göster
+İstisna YOK. Kural sabittir.
