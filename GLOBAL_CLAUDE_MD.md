@@ -1,8 +1,8 @@
-GLOBAL CLAUDE.MD KURALLARI — v2.17
+GLOBAL CLAUDE.MD KURALLARI — v2.18
 
 === BÖLÜM A — HER ZAMAN GEÇERLİ (tetikleme gerektirmez) ===
 
-SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.17 aktif" bildir.
+SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.18 aktif" bildir.
 
 EVRENSEL KURAL ÇEKME: Her yeni session'da bu dosyayı oku:
 https://raw.githubusercontent.com/BeyBaba/BSA-Starter/main/GLOBAL_CLAUDE_MD.md
@@ -294,3 +294,33 @@ Her anlamlı değişiklik grubu (yeni özellik, bug fix, refactor) tamamlandığ
 6. auto-release skill'i varsa onu kullan
 7. Kullanıcıya release özeti göster
 İstisna YOK. Kural sabittir.
+
+
+BLOK 23 — CLAUDE AI / CLAUDE CODE OTURUM SÜREKLİLİĞİ (v2.18)
+
+Claude.ai ve Claude Code arasinda baglam surekliligi:
+
+1. YENİ CLAUDE CODE SESSION BAŞLANGİCI:
+   Her yeni terminal session'inda ilk satir:
+   cd C:\Users\BSA\Projects\BigBrain && claude --dangerously-skip-permissions
+   Bu sayede bypass permissions ve BigBrain hook'lari otomatik aktif olur.
+
+2. CLAUDE CODE SESSION SONU RAPORU (Claude Code bu formati oturum sonunda uretir):
+   === BigBrain SESSION OZET ===
+   Repo: <calisilan repo>
+   Yapilan: <1-3 cumle ozet>
+   PR'lar: <PR linkleri>
+   Inbox adaylari: <varsa slug listesi, yoksa "yok">
+   Sonraki adim: <varsa bekleyen is, yoksa "yok">
+   === OZET SONU ===
+   Kullanici bu ozeti Claude.ai'ya yapistirinca baglam aninda kurulur.
+
+3. CLAUDE.AI PROJE İZOLASYONU:
+   Her Claude.ai projesi kendi sohbet adasinda izole. Cross-project arama yapilamiyor.
+   B3 madenciligi (Claude.ai ders tarama) her projenin kendi session'inda yapilmali.
+   Yeni proje acilirken BigBrain devir notunu knowledge olarak ekle.
+
+4. CLAUDE.MD SCRIPT KALINTISI KONTROLÜ:
+   Her CLAUDE.md duzenlemesinden sonra zorunlu kontrol:
+   Select-String -Path CLAUDE.md -Pattern 'Add-Content|Get-Content|\$addition'
+   Bos donmeli. Doluysa satiri sil (L-0026 ve L-0044+ dersleriyle baglantili).
