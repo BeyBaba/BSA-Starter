@@ -1,8 +1,8 @@
-GLOBAL CLAUDE.MD KURALLARI — v2.18
+GLOBAL CLAUDE.MD KURALLARI — v2.19
 
 === BÖLÜM A — HER ZAMAN GEÇERLİ (tetikleme gerektirmez) ===
 
-SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.18 aktif" bildir.
+SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.19 aktif" bildir.
 
 EVRENSEL KURAL ÇEKME: Her yeni session'da bu dosyayı oku:
 https://raw.githubusercontent.com/BeyBaba/BSA-Starter/main/GLOBAL_CLAUDE_MD.md
@@ -296,13 +296,19 @@ Her anlamlı değişiklik grubu (yeni özellik, bug fix, refactor) tamamlandığ
 İstisna YOK. Kural sabittir.
 
 
-BLOK 23 — CLAUDE AI / CLAUDE CODE OTURUM SÜREKLİLİĞİ (v2.18)
+BLOK 23 — CLAUDE AI / CLAUDE CODE OTURUM SÜREKLİLİĞİ (v2.19)
+
+⚠️ POWERSHELL KURALI: Windows PowerShell 5.1'de `&&` operatörü ÇALIŞMAZ.
+Çok adımlı komutlar asla `&&` ile birleştirilmez; her komut ayrı satır
+(veya gerekiyorsa `;`) olarak verilir. Bu kural tüm talimat, doküman ve
+hook çıktıları için geçerlidir.
 
 Claude.ai ve Claude Code arasinda baglam surekliligi:
 
 1. YENİ CLAUDE CODE SESSION BAŞLANGİCI:
-   Her yeni terminal session'inda ilk satir:
-   cd C:\Users\BSA\Projects\BigBrain && claude --dangerously-skip-permissions
+   Her yeni terminal session'inda iki adim:
+   cd C:\Users\BSA\Projects\BigBrain
+   claude --dangerously-skip-permissions
    Bu sayede bypass permissions ve BigBrain hook'lari otomatik aktif olur.
 
 2. CLAUDE CODE SESSION SONU RAPORU (Claude Code bu formati oturum sonunda uretir):
@@ -324,3 +330,8 @@ Claude.ai ve Claude Code arasinda baglam surekliligi:
    Her CLAUDE.md duzenlemesinden sonra zorunlu kontrol:
    Select-String -Path CLAUDE.md -Pattern 'Add-Content|Get-Content|\$addition'
    Bos donmeli. Doluysa satiri sil (L-0026 ve L-0044+ dersleriyle baglantili).
+
+
+=== SÜRÜM GEÇMİŞİ ===
+
+v2.19 — BLOK 23: PowerShell && düzeltmesi; oturum başlatma komutu iki ayrı satıra bölündü, && yasağı kalıcı kural olarak eklendi.
