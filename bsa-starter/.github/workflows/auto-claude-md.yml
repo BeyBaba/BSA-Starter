@@ -120,90 +120,58 @@ jobs:
           cat > CLAUDE.md << CLAUDEOF
 # CLAUDE.md — ${REPO_NAME}
 
-Bu dosya Claude'un proje kurallarını otomatik okuduğu yapılandırma dosyasıdır.
-Her session başında ve release öncesinde bu dosya okunur.
-> Otomatik oluşturuldu: $(date '+%Y-%m-%d') · GitHub Actions
+## 0. GLOBAL KURALLAR (REFERANS - KOPYA DEGIL)
+Bu dosya global kurallarin kopyasini icermez. Her session baslangicinda su adres okunur:
+https://raw.githubusercontent.com/BeyBaba/BSA-Starter/main/GLOBAL_CLAUDE_MD.md
 
----
+Kural: Bu dosyaya global kural metni yapistirilamaz ve surum numarasi yazilamaz.
+Global kural degisirse tek kaynak guncellenir; bu dosya degismez.
 
-## 📁 Proje Yapısı
+BSA_SCOPE = true
 
-\`\`\`
-${REPO_NAME}/
+## 1. PROJE KIMLIGI
+- Ad: ${REPO_NAME}
+- Repo: https://github.com/${GITHUB_REPOSITORY}
+- Olusturulma: $(date '+%Y-%m-%d') (GitHub Actions otomatik)
+- Yerel yol: <yerel-yolu-buraya-ekle>
+- Amac: <projenin-amacini-buraya-ekle>
+- Production URL: <deploy-url-buraya-ekle>
+
+## 2. TEKNOLOJI STACK
+- Tespit edilen stack:
 $(echo -e "$STACK_LIST")
-└── CLAUDE.md              ← bu dosya
-\`\`\`
+- Versiyon dosyalari:
+$(echo -e "$VERSION_FILES")
 
-**GitHub:** https://github.com/${GITHUB_REPOSITORY}
-**Owner:** ${OWNER}
+## 3. KOMUTLAR
+$(echo -e "$BUILD_CMDS")
 
----
+## 4. PROJEYE OZEL KURALLAR
+- SADECE globalde olmayan veya globalden DAHA KATI kurallar buraya eklenir.
 
-## 🔢 Versiyon Kuralları
-
-### Bump Stratejisi
-
-| Modül | Bump Tipi | Açıklama |
+### Versiyon Bump Stratejisi
+| Modul | Bump Tipi | Aciklama |
 |-------|-----------|----------|
 $(echo -e "$BUMP_TABLE")
 
-### Global Tag Kuralı
+### Release Kurallari
+1. Sadece main branch'inden release cik.
+2. Test gecmeden release yapma.
+3. chore: veya release: prefix commit release tetikler.
+4. GitHub Release artifact ekle (varsa).
 
-Tüm modüller aynı Git tag'ini paylaşır: \`vX.Y.Z\`
-Tag, **en yüksek bump tipine** göre belirlenir.
-
-### Versiyon Dosyaları
-$(echo -e "$VERSION_FILES")
-
----
-
-## 🚀 Release Kuralları
-
-1. Sadece \`main\` branch'inden release çık.
-2. Test geçmeden release yapma.
-3. \`chore:\` veya \`release:\` prefix'li commit → release tetikler.
-4. GitHub Release'e artifact ekle (build çıktısı varsa).
-5. Release notes: son commit mesajlarından oluştur.
-
----
-
-## 🔨 Build Komutları
-
-$(echo -e "$BUILD_CMDS")
-
----
-
-## 📝 Commit Mesajı Formatı
-
-\`\`\`
-feat:     Yeni özellik
-fix:      Bug düzeltme
-chore:    Versiyon / config değişikliği
-docs:     Sadece dokümantasyon
-refactor: Kod yeniden düzenleme
-perf:     Performans iyileştirmesi
-security: Güvenlik yaması
-test:     Test ekleme / düzenleme
-\`\`\`
-
----
-
-## ⚙️ Ortam Değişkenleri
-
-\`\`\`bash
-GITHUB_TOKEN=...   # gh auth login ile set et
-REPO=${GITHUB_REPOSITORY}
-\`\`\`
-
----
-
-## 📋 Release Öncesi Kontrol Listesi
-
-- [ ] \`main\` branch'inde miyiz?
-- [ ] Tüm modüllerde versiyon eşlendi mi?
+### Kontrol Listesi
+- [ ] main branch'inde miyiz?
+- [ ] Tum moduellerde versiyon eslendi mi?
 $(echo -e "$CHECKLIST")
-- [ ] \`CHANGELOG.md\` güncellendi mi?
-- [ ] GitHub Release artifact'ları hazır mı?
+- [ ] CHANGELOG.md guncellendi mi?
+
+## 5. BILINEN TUZAKLAR
+- Bu projede yasanan hatalar BigBrain ders numaralariyla (L-XXXX) buraya eklenir.
+- <ilk-hata-buraya-ekle>
+
+## 6. DOKUNULMAZ DOSYALAR
+- <degistirilmesi-yasak-dosya-listesi-buraya-ekle>
 CLAUDEOF
 
           echo "✅ CLAUDE.md oluşturuldu"
