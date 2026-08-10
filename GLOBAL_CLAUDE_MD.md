@@ -1,8 +1,8 @@
-GLOBAL CLAUDE.MD KURALLARI — v2.19
+GLOBAL CLAUDE.MD KURALLARI — v2.20
 
 === BÖLÜM A — HER ZAMAN GEÇERLİ (tetikleme gerektirmez) ===
 
-SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.19 aktif" bildir.
+SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.20 aktif" bildir.
 
 EVRENSEL KURAL ÇEKME: Her yeni session'da bu dosyayı oku:
 https://raw.githubusercontent.com/BeyBaba/BSA-Starter/main/GLOBAL_CLAUDE_MD.md
@@ -157,6 +157,22 @@ BLOK 3 — DEPLOY
 Vercel(önerilen)/Netlify/EAS/GitHub Pages/VPS
 YASAK: Vercel+SQLite, Vercel+execSync, Vercel+lokal DB
 ZORUNLU: Vercel+Supabase(PostgreSQL)
+
+İSTİSNA KATEGORİLERİ (v2.20):
+Aşağıdaki kategorilerdeki repolar "Next.js+Supabase zorunlu" kuralından MUAFTIR.
+Bu repolarda stack uyumsuzluğu uyarısı ÜRETILMEZ.
+
+  KATEGORİ DIŞI: Çalışır uygulama barındırmayan repolar (doküman, şablon, skill, arşiv)
+  için stack kuralı GEÇERSİZDİR.
+  Örnekler: BigBrain, BSA-Starter, ui-ux-pro-max-skill_06062006
+
+  PLATFORM UYUMSUZ: Masaüstü (Electron) ve native mobil (React Native/Expo) projeler
+  için Next.js+Vercel GEÇERSİZDİR; Supabase opsiyoneldir.
+  Örnekler: VoiceFlow (Electron), ADHD-Killer-Pro-Project (Expo/RN), open-design (Electron)
+
+  BSA DIŞI: BSA_SCOPE=false işaretli upstream/açık kaynak repolar için
+  tüm global kurallar GEÇERSİZDİR; upstream proje kuralları geçerlidir.
+  Örnek: omi
 
 BLOK 4 — VERSİYON
 Semantic versioning (major.minor.patch). package.json'dan oku, tüm dosyalarda güncelle. Major öncesi ZIP yedek.
@@ -334,4 +350,5 @@ Claude.ai ve Claude Code arasinda baglam surekliligi:
 
 === SÜRÜM GEÇMİŞİ ===
 
+v2.20 — BLOK 3 İstisna Kategorileri eklendi: KATEGORİ DIŞI (doküman/şablon/skill repoları), PLATFORM UYUMSUZ (Electron/React Native), BSA DIŞI (BSA_SCOPE=false); bu repolarda "Next.js+Supabase zorunlu" uyarısı üretilmez.
 v2.19 — BLOK 23: PowerShell && düzeltmesi; oturum başlatma komutu iki ayrı satıra bölündü, && yasağı kalıcı kural olarak eklendi.
