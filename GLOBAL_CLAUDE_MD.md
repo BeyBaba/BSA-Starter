@@ -1,20 +1,46 @@
-GLOBAL CLAUDE.MD KURALLARI — v2.21
+GLOBAL CLAUDE.MD KURALLARI — v2.22
 
 === BÖLÜM A — HER ZAMAN GEÇERLİ (tetikleme gerektirmez) ===
 
-SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.21 aktif" bildir.
+SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.22 aktif" bildir.
 
-ZORUNLU SKİLL/MCP SETİ (v2.21): Her session'da şu üçü kurulu olmalı ve AKTİF kullanılmalı:
-- frontend-design skill → her UI/arayüz işinde yükle (claude.ai skill, kurulu).
-- context7 MCP → üçüncü parti kütüphane API'si yazmadan önce güncel doküman çek.
-  Kurulum: claude mcp add --scope user --transport http context7 https://mcp.context7.com/mcp
-- superpowers plugin (obra) → brainstorming → writing-plans → TDD → systematic-debugging →
-  verification-before-completion akışı. Kurulum: claude plugin marketplace add obra/superpowers-marketplace ;
-  claude plugin install superpowers@superpowers-marketplace --scope user
-Session başında `claude plugin list` + `claude mcp get context7` ile kontrol et; eksikse yeniden kur, kullanıcıya sorma.
-Windows'ta MCP eklerken uzak HTTP uç noktası varsa `--transport http`; stdio zorunluysa `cmd /c npx -y <paket>` sarmala.
+ZORUNLU SKİLL/MCP SETİ (v2.22): Aşağıdaki araçlar her session'da kurulu ve AKTİF olmalı. Hepsi
+user scope'ta kuruludur (2026-09-21). Session başında `claude plugin list` + `claude mcp list` +
+`npx skills list` ile kontrol et; eksik varsa aşağıdaki komutla SESSİZCE yeniden kur, kullanıcıya sorma.
 
-PROAKTİFLİK (v2.21): Kullanıcı "proaktif ol" der ve bunun unutulmasından şikayetçidir.
+MCP:
+- context7 → kütüphane API'si yazmadan önce güncel doküman. `claude mcp add --scope user --transport http context7 https://mcp.context7.com/mcp`
+- memory / sequential-thinking / filesystem → `claude mcp add --scope user <ad> -- cmd /c npx -y @modelcontextprotocol/server-<ad>` (Windows: stdio MCP'ler cmd /c npx ile sarılır; uzak HTTP varsa --transport http tercih et)
+
+PLUGIN (claude plugin install <ad>@<marketplace> --scope user):
+- superpowers@superpowers-marketplace → brainstorming, writing-plans, TDD, systematic-debugging, verification-before-completion, dispatching-parallel-agents, subagent-driven-development, using-git-worktrees
+- episodic-memory@superpowers-marketplace → geçmiş session'larda semantik arama (SessionStart hook otomatik indeksler)
+- double-shot-latte@superpowers-marketplace → gereksiz "devam edeyim mi?" duraklamalarını kaldırır (jq gerekir, kurulu)
+- feature-dev@claude-plugins-official → /feature-dev: code-explorer → code-architect → code-reviewer agent akışı
+- code-review@claude-plugins-official → /code-review: paralel uzman agent'larla PR incelemesi, güven skoru
+- pr-review-toolkit@claude-plugins-official → /review-pr: test/sessiz hata/tip tasarımı/yorum reviewer agent'ları
+- security-guidance@claude-plugins-official → düzenleme sırasında güvenlik pattern uyarısı, commit öncesi secret taraması (hook)
+- hookify@claude-plugins-official → /hookify: konuşmadaki kuralları gerçek hook'a çevirir
+- claude-code-setup@claude-plugins-official → projeyi tarayıp hook/skill/subagent önerir
+- typescript-lsp@claude-plugins-official → TS kod zekası (global typescript-language-server gerekir, kurulu)
+Marketplace'ler: claude-plugins-official (varsayılan), obra/superpowers-marketplace (`claude plugin marketplace add obra/superpowers-marketplace`)
+
+SKILL (npx -y skills add <repo> -s <skill> -a claude-code -g -y --copy; ~/.claude/skills altına kopyalanır):
+- frontend-design (claude.ai skill, kurulu) → her UI/arayüz işinde
+- supabase/agent-skills → supabase, supabase-postgres-best-practices (BLOK 13 ile birebir)
+- vercel-labs/agent-skills → vercel-react-best-practices, vercel-composition-patterns, web-design-guidelines
+- currents-dev/playwright-best-practices-skill → playwright-best-practices (UI TESTİ ZORUNLU kuralı için)
+
+KULLANIM ZORUNLULUĞU: UI işi → frontend-design + web-design-guidelines; React/Next.js kodu → vercel-react-best-practices;
+Supabase/SQL → supabase-postgres-best-practices + CANLI ŞEMA; Playwright → playwright-best-practices;
+yeni özellik → superpowers brainstorming → writing-plans → /feature-dev veya subagent-driven-development;
+PR → /code-review + /review-pr; bug → systematic-debugging; bitiş → verification-before-completion.
+
+SKİLL KULLANIM BİLDİRİMİ (v2.22): Her görev raporunun sonunda "🧰 Kullanılan skill/plugin" bölümü ZORUNLU:
+hangi skill/plugin/MCP kullanıldı ve somut olarak ne kattı (örn. "context7: Next.js 15 cache API'si
+değişmişti, eski imzayı kullanmaktan kurtardı"). Hiçbiri kullanılmadıysa "kullanılmadı" yaz — sessiz geçme.
+
+PROAKTİFLİK (v2.22): Kullanıcı "proaktif ol" der ve bunun unutulmasından şikayetçidir.
 Her görevde, istenen işi bitirdikten sonra: (1) işe yarayacak skill/plugin/MCP'yi kendiliğinden öner,
 (2) fark edilen yan sorunları (bağlanmayan MCP, sürüm drift'i, eksik test) sorulmadan raporla,
 (3) çoklu ajan (paralel subagent / worktree) kullanılabilecek işi kendin öner ve uygula.
@@ -366,6 +392,7 @@ Claude.ai ve Claude Code arasinda baglam surekliligi:
 
 === SÜRÜM GEÇMİŞİ ===
 
+v2.22 — ZORUNLU SKİLL/MCP SETİ tam listeye genişletildi (10 plugin + 6 skill + 4 MCP, kurulum komutları, kullanım eşlemesi); SKİLL KULLANIM BİLDİRİMİ zorunlu bölüm eklendi.
 v2.21 — ZORUNLU SKİLL/MCP SETİ (frontend-design + context7 + superpowers, session başı kontrol) ve PROAKTİFLİK kuralı eklendi; Windows MCP transport notu.
 v2.20 — BLOK 3 İstisna Kategorileri eklendi: KATEGORİ DIŞI (doküman/şablon/skill repoları), PLATFORM UYUMSUZ (Electron/React Native), BSA DIŞI (BSA_SCOPE=false); bu repolarda "Next.js+Supabase zorunlu" uyarısı üretilmez.
 v2.19 — BLOK 23: PowerShell && düzeltmesi; oturum başlatma komutu iki ayrı satıra bölündü, && yasağı kalıcı kural olarak eklendi.
