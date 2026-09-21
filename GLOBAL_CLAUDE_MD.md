@@ -1,8 +1,8 @@
-GLOBAL CLAUDE.MD KURALLARI — v2.22
+GLOBAL CLAUDE.MD KURALLARI — v2.23
 
 === BÖLÜM A — HER ZAMAN GEÇERLİ (tetikleme gerektirmez) ===
 
-SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.22 aktif" bildir.
+SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.23 aktif" bildir.
 
 ZORUNLU SKİLL/MCP SETİ (v2.22): Aşağıdaki araçlar her session'da kurulu ve AKTİF olmalı. Hepsi
 user scope'ta kuruludur (2026-09-21). Session başında `claude plugin list` + `claude mcp list` +
@@ -45,6 +45,16 @@ Her görevde, istenen işi bitirdikten sonra: (1) işe yarayacak skill/plugin/MC
 (2) fark edilen yan sorunları (bağlanmayan MCP, sürüm drift'i, eksik test) sorulmadan raporla,
 (3) çoklu ajan (paralel subagent / worktree) kullanılabilecek işi kendin öner ve uygula.
 Sormadan öneri getirmek kural; öneriyi uygulamak için onay yeterli.
+
+RAPOR ŞABLONU (v2.23): Claude Code her görev sonunda rapor dosyasına ZORUNLU bölümler yazar:
+Proaktif notlar, Ders adayları (inbox dosya adları), Kullanılan skill/agent. Sohbete yazılan öneri
+raporda da olmalı; Claude.ai yalnız rapor dosyasını okur (sohbeti göremez).
+
+ÇOKLU AJAN (v2.23): 3+ birbirinden bağımsız dosya/konu içeren görevde paralel subagent kullan
+(BLOK 22 dosya sahipliği kuralıyla); tek dosyaya dokunan işler sıralı. Rapora hangi ajanın neyi yaptığını yaz.
+
+HAFIZA OKUMA (v2.23): Yeni özelliğe başlamadan `grep -i '<konu anahtar kelimesi>'
+C:/Users/BSA/Projects/BigBrain/lessons/INDEX.md` çalıştır; eşleşen dersleri rapora "Uygulanan dersler" olarak yaz.
 
 EVRENSEL KURAL ÇEKME: Her yeni session'da bu dosyayı oku:
 https://raw.githubusercontent.com/BeyBaba/BSA-Starter/main/GLOBAL_CLAUDE_MD.md
@@ -390,8 +400,18 @@ Claude.ai ve Claude Code arasinda baglam surekliligi:
    Bos donmeli. Doluysa satiri sil (L-0026 ve L-0044+ dersleriyle baglantili).
 
 
+BLOK 24 — UI BİÇİM STANDARTLARI (para & telefon) (BigBrain L-0098)
+- Para: TEK KAYNAK formatMoney(n,{symbol}) → tr-TR, DAİMA 2 hane "1.234,56" (binlik ".", kuruş ","); ₺ önde.
+  Girişte parseMoney ("1.234,56" ve "1234.56" kabul), sunucuya ham number gider. maximumFractionDigits:0 YASAK.
+- Telefon: UI'da sabit görünür "+90" öneki + 3-3-2-2 maske ("532 377 85 20"); ortak PhoneInput bileşeni.
+  DB'ye E.164 yazılır (+905323778520; baştaki 0/90/+90 temizlenir, 10 haneye kırpılır). wa.me linki E.164'ten üretilir.
+  Mevcut kayıtlar görüntülenirken formatTrPhone(normalize(...)) ile gösterilir; toplu dönüşüm onaylı tek update.
+- Bu biçimler TÜM görünen yerlerde geçerli (dashboard, listeler, PDF/makbuz, sözleşme, WhatsApp/e-posta metni).
+
+
 === SÜRÜM GEÇMİŞİ ===
 
+v2.23 — BÖLÜM A: RAPOR ŞABLONU (zorunlu rapor bölümleri) + ÇOKLU AJAN (3+ bağımsız → paralel subagent) + HAFIZA OKUMA (INDEX grep) eklendi; BLOK 24 UI biçim standardı (para/telefon) BigBrain mirror'ıyla birleştirildi.
 v2.22 — ZORUNLU SKİLL/MCP SETİ tam listeye genişletildi (10 plugin + 6 skill + 4 MCP, kurulum komutları, kullanım eşlemesi); SKİLL KULLANIM BİLDİRİMİ zorunlu bölüm eklendi.
 v2.21 — ZORUNLU SKİLL/MCP SETİ (frontend-design + context7 + superpowers, session başı kontrol) ve PROAKTİFLİK kuralı eklendi; Windows MCP transport notu.
 v2.20 — BLOK 3 İstisna Kategorileri eklendi: KATEGORİ DIŞI (doküman/şablon/skill repoları), PLATFORM UYUMSUZ (Electron/React Native), BSA DIŞI (BSA_SCOPE=false); bu repolarda "Next.js+Supabase zorunlu" uyarısı üretilmez.
