@@ -1,0 +1,22 @@
+# rules.txt — REGEX<TAB>L-no<TAB>mesaj<TAB>[TOOL]  (TOOL: BASH|POWERSHELL|ANY; bos=ANY)
+# pre-bash-guard.sh bunu okur; eslesme -> exit 2. Komut-deterministik HOOK dersleri.
+git[ ]+push([ ].*)?[ ](origin[ ]+)?main([ ]|$)	L-0011	main branch'e dogrudan push YASAK. Dogru yol: feature branch + PR + squash merge.	ANY
+git[ ]+push.*(--force|-f)([ ]|$)	DESTRUCTIF	force-push acik onay ister. Dogru yol: --force-with-lease ve yalniz kendi feature/docs branch.	ANY
+git[ ]+reset[ ]+--hard	DESTRUCTIF	reset --hard veri kaybettirir; acik onay gerekli.	ANY
+rm[ ]+-rf[ ]	DESTRUCTIF	rm -rf acik onay ister; hedefi once dogrula.	ANY
+--no-verify	DESTRUCTIF	--no-verify hook/imza atlar; acik onay olmadan kullanma.	ANY
+drop[ ]+(database|table)[ ]	DESTRUCTIF	DB drop acik onay ister; yalniz migration ile.	ANY
+git[ ]+add[ ].*\.env([ ."']|$)	L-0014	secret/.env commit YASAK. Dogru yol: .gitignore + .secrets/ortam degiskeni.	ANY
+git[ ]+add[ ].*\.claude/worktrees	L-0020	worktree/scratch commit etme. Dogru yol: .gitignore, git rm --cached.	ANY
+git[ ]+add[ ].*\.(od|tmp)/	L-0020	scratch klasoru commit etme. Dogru yol: .gitignore.	ANY
+git[ ]+add[ ].*sw\.js	L-0040	uretilen sw.js build artefaktidir; commit etme (.gitignore).	ANY
+git[ ]+add[ ].*\.(zip|mp4|mov|avi|tif|tiff|psd|iso|raw)([ ."']|$)	L-0080	buyuk binary git'e girmesin. Dogru yol: .gitignore + Drive/Releases/LFS.	ANY
+NEXT_PUBLIC[A-Z_]*SERVICE_ROLE	L-0003	SERVICE_ROLE anahtari client bundle'a sizmaz. Dogru yol: yalniz server-side, NEXT_PUBLIC altinda degil.	ANY
+gh[ ]+repo[ ]+delete	L-0028	gh repo delete destructive + token scope. Acik onay gerekli.	ANY
+gh[ ]+(pr|release)[ ]+create.*--body[ =]["']	L-0068	cok satirli PR/release body --body ile bozulur. Dogru yol: --body-file <dosya>.	ANY
+&&	L-0066	PowerShell 5.1 && desteklemez. Dogru yol: ayri satir veya ; (chain icin if $?).	POWERSHELL
+(Get-Content|Set-Content|Move-Item|Copy-Item|Test-Path|Get-ChildItem|New-Item|Remove-Item|Select-String)	L-0051	PowerShell cmdlet Bash tool'da calismaz. Dogru yol: PowerShell tool kullan.	BASH
+Add-Content.*CLAUDE\.md	L-0050	CLAUDE.md'e Add-Content script kalintisi birakir. Dogru yol: Write tool + L-0050 kontrolu.	POWERSHELL
+(Stop-Process|Get-Process)[ ].*-Name[ ]+["']?\*?claude	L-0084	claude sureclerini isimle hedefleme (Claude Code CLI de claude). Dogru yol: -Path *AnthropicClaude* filtresi.	POWERSHELL
+flutterfire[ ]+configure	L-0024	prod config ureten komut; kritik dosya onayi gerekli.	ANY
+gh[ ]+pr[ ]+merge	L-0069	merge sonrasi state dogrula (sessiz basarisiz olabilir); merge karari Savas'in.	ANY

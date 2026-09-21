@@ -1,0 +1,19 @@
+{
+  "_comment": "Faz 2'de ~/.claude/settings.json icindeki hooks nesnesine EKLENECEK. Simdi KURULMAZ. Betikler ~/.claude/hooks/ altina kopyalanir (rules.txt ile birlikte).",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          { "type": "command", "command": "bash C:/Users/BSA/.claude/hooks/pre-bash-guard.sh" }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          { "type": "command", "command": "bash C:/Users/BSA/.claude/hooks/pre-write-guard.sh" }
+        ]
+      }
+    ]
+  }
+}
