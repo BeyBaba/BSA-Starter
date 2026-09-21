@@ -1,8 +1,24 @@
-GLOBAL CLAUDE.MD KURALLARI — v2.20
+GLOBAL CLAUDE.MD KURALLARI — v2.21
 
 === BÖLÜM A — HER ZAMAN GEÇERLİ (tetikleme gerektirmez) ===
 
-SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.20 aktif" bildir.
+SESSION BAŞLANGIÇ: Her yeni session'da "Global CLAUDE.md v2.21 aktif" bildir.
+
+ZORUNLU SKİLL/MCP SETİ (v2.21): Her session'da şu üçü kurulu olmalı ve AKTİF kullanılmalı:
+- frontend-design skill → her UI/arayüz işinde yükle (claude.ai skill, kurulu).
+- context7 MCP → üçüncü parti kütüphane API'si yazmadan önce güncel doküman çek.
+  Kurulum: claude mcp add --scope user --transport http context7 https://mcp.context7.com/mcp
+- superpowers plugin (obra) → brainstorming → writing-plans → TDD → systematic-debugging →
+  verification-before-completion akışı. Kurulum: claude plugin marketplace add obra/superpowers-marketplace ;
+  claude plugin install superpowers@superpowers-marketplace --scope user
+Session başında `claude plugin list` + `claude mcp get context7` ile kontrol et; eksikse yeniden kur, kullanıcıya sorma.
+Windows'ta MCP eklerken uzak HTTP uç noktası varsa `--transport http`; stdio zorunluysa `cmd /c npx -y <paket>` sarmala.
+
+PROAKTİFLİK (v2.21): Kullanıcı "proaktif ol" der ve bunun unutulmasından şikayetçidir.
+Her görevde, istenen işi bitirdikten sonra: (1) işe yarayacak skill/plugin/MCP'yi kendiliğinden öner,
+(2) fark edilen yan sorunları (bağlanmayan MCP, sürüm drift'i, eksik test) sorulmadan raporla,
+(3) çoklu ajan (paralel subagent / worktree) kullanılabilecek işi kendin öner ve uygula.
+Sormadan öneri getirmek kural; öneriyi uygulamak için onay yeterli.
 
 EVRENSEL KURAL ÇEKME: Her yeni session'da bu dosyayı oku:
 https://raw.githubusercontent.com/BeyBaba/BSA-Starter/main/GLOBAL_CLAUDE_MD.md
@@ -350,5 +366,6 @@ Claude.ai ve Claude Code arasinda baglam surekliligi:
 
 === SÜRÜM GEÇMİŞİ ===
 
+v2.21 — ZORUNLU SKİLL/MCP SETİ (frontend-design + context7 + superpowers, session başı kontrol) ve PROAKTİFLİK kuralı eklendi; Windows MCP transport notu.
 v2.20 — BLOK 3 İstisna Kategorileri eklendi: KATEGORİ DIŞI (doküman/şablon/skill repoları), PLATFORM UYUMSUZ (Electron/React Native), BSA DIŞI (BSA_SCOPE=false); bu repolarda "Next.js+Supabase zorunlu" uyarısı üretilmez.
 v2.19 — BLOK 23: PowerShell && düzeltmesi; oturum başlatma komutu iki ayrı satıra bölündü, && yasağı kalıcı kural olarak eklendi.
