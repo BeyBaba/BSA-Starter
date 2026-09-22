@@ -1,17 +1,23 @@
 {
-  "_comment": "Faz 2'de ~/.claude/settings.json icindeki hooks nesnesine EKLENECEK. Simdi KURULMAZ. Betikler ~/.claude/hooks/ altina kopyalanir (rules.txt ile birlikte).",
+  "_comment": "Faz 2: `bash hooks/install.sh` bu girdileri ~/.claude/settings.json'daki hooks nesnesine IDEMPOTENT ekler (C:/Users/BSA/.claude/hooks yolu kurulumda gercek CLAUDE_HOME ile degistirilir). Elle yapistirmak gerekmez; betikler ~/.claude/hooks/ altina rules.txt ile birlikte kopyalanir.",
   "hooks": {
     "PreToolUse": [
       {
         "matcher": "Bash|PowerShell",
         "hooks": [
-          { "type": "command", "command": "bash C:/Users/BSA/.claude/hooks/pre-bash-guard.sh" }
+          {
+            "type": "command",
+            "command": "bash C:/Users/BSA/.claude/hooks/pre-bash-guard.sh"
+          }
         ]
       },
       {
         "matcher": "Write|Edit",
         "hooks": [
-          { "type": "command", "command": "bash C:/Users/BSA/.claude/hooks/pre-write-guard.sh" }
+          {
+            "type": "command",
+            "command": "bash C:/Users/BSA/.claude/hooks/pre-write-guard.sh"
+          }
         ]
       }
     ]
