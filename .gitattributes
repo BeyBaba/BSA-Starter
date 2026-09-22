@@ -1,0 +1,5 @@
+# Bash hook/kurulum betikleri ve kural dosyalari her platformda LF (CRLF -> rules.txt TOOL sutunu "ANY" olur, guard fail-open; L-aday)
+*.sh text eol=lf
+hooks/** text eol=lf
+skills/** text eol=lf
+agents/** text eol=lf
