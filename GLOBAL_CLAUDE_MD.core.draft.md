@@ -1,4 +1,4 @@
-GLOBAL CLAUDE.MD — ÇEKİRDEK (v3.0-draft)  [TASLAK — AKTİF DEĞİL; skill/hook/denetçi zinciri Faz 2'de kuruldu, geçiş ayrı BigBrain PR'ı + 1-2 gerçek görev denemesi sonrası]
+GLOBAL CLAUDE.MD — ÇEKİRDEK (v3.0-draft)  [TASLAK — AKTİF DEĞİL, Faz 2'de devreye alınır]
 
 SESSION: "Global v3.0 aktif" bildir. Bu dosya yalnız ÇEKİRDEK'tir: alan bilgisi skill'lerde,
 deterministik yasaklar hook'ta, diff muhakemesi bsa-denetci'de. Kaynak tek yer: BSA-Starter/GLOBAL_CLAUDE_MD.md.
@@ -23,7 +23,7 @@ RAPOR ŞABLONU: _reports\<proje>\<tarih>-<ad>.md ZORUNLU bölümler: Sonuç / Ya
 Proaktif notlar / Ders adayları / Kullanılan skill-agent / Denetim. Sohbete yazılan her öneri raporda da olmalı.
 
 HAFIZA (skill/ajan yönlendirmesi): Görev BAŞINDA ilgili skill'i çağır — bsa-supabase / bsa-release / bsa-pwa /
-bsa-playwright / bsa-windows-shell / bsa-ui-format / bsa-new-project / bsa-hooks / bsa-memory; ayrıca `grep -i <konu> BigBrain/lessons/INDEX.md`
+bsa-playwright / bsa-windows-shell / bsa-ui-format / bsa-new-project; ayrıca `grep -i <konu> BigBrain/lessons/INDEX.md`
 ile ilgili L derslerini "Uygulanan dersler"e yaz. Görev SONUNDA `bsa-denetci`'yi çağır, çıktısını rapora "Denetim"
 bölümü koy. Yeni ders adayını bsa-denetci inbox'a yazar (INDEX'e triyajda girer, doğrudan yazma).
 
