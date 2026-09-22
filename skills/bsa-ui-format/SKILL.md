@@ -45,7 +45,7 @@ description: UI/arayüz, tema, para-telefon biçimi, i18n ve responsive layout i
 
 ### BLOK 24 — UI BİÇİM STANDARTLARI (para & telefon)
 - Para: TEK KAYNAK `formatMoney(n,{symbol})` → tr-TR, DAİMA 2 hane "1.234,56" (binlik ".", kuruş ","); ₺ önde. Girişte `parseMoney` ("1.234,56" ve "1234.56" kabul), sunucuya ham number gider. `maximumFractionDigits:0` YASAK.
-- Telefon: UI'da sabit görünür "+90" öneki + 3-3-2-2 maske ("532 377 85 20"); ortak `PhoneInput` bileşeni. DB'ye E.164 yazılır (+905323778520; baştaki 0/90/+90 temizlenir, 10 haneye kırpılır). `wa.me` linki E.164'ten üretilir. Mevcut kayıtlar `formatTrPhone(normalize(...))` ile gösterilir; toplu dönüşüm onaylı tek update.
+- Telefon: UI'da sabit görünür "+90" öneki + 3-3-2-2 maske ("5xx xxx xx xx"); ortak `PhoneInput` bileşeni. DB'ye E.164 yazılır (+905xxxxxxxxx; baştaki 0/90/+90 temizlenir, 10 haneye kırpılır). `wa.me` linki E.164'ten üretilir. Mevcut kayıtlar `formatTrPhone(normalize(...))` ile gösterilir; toplu dönüşüm onaylı tek update.
 - Bu biçimler TÜM görünen yerlerde geçerli: dashboard, listeler, PDF/makbuz, sözleşme, WhatsApp/e-posta metni.
 
 ### BLOK 20 — MATERIAL YOU TASARIM SİSTEMİ (Material Design 3; her yeni ve mevcut projede)
@@ -79,7 +79,7 @@ description: UI/arayüz, tema, para-telefon biçimi, i18n ve responsive layout i
 
 ## Rapora yazılacak
 - `Uygulanan dersler: L-0021, L-0071, L-0088, L-0098` (gerçekten uygulananlar).
-- Kanıt: Playwright screenshot (light + dark; 375px ve 768px+), `<select>` koyu temada okunur ekran görüntüsü, para/telefon örnek çıktıları ("₺1.234,56"; "+90 532 377 85 20" → DB "+905323778520"), i18n grep'inde hardcoded metin 0.
+- Kanıt: Playwright screenshot (light + dark; 375px ve 768px+), `<select>` koyu temada okunur ekran görüntüsü, para/telefon örnek çıktıları ("₺1.234,56"; "+90 5xx xxx xx xx" → DB "+905xxxxxxxxx"), i18n grep'inde hardcoded metin 0.
 - Bölümler: Sonuç / Yapılanlar / Test / Varsayımlar / Proaktif notlar / Ders adayları / Kullanılan skill/agent.
 
 Kaynak dersler: L-0021, L-0071, L-0088, L-0098

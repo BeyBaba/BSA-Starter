@@ -7,9 +7,10 @@ set -euo pipefail
 INPUT=$(cat)
 
 # Dongu korumasi: bu durus zaten hook'un tetikledigi turdan geliyorsa izin ver
-if echo "$INPUT" | grep -q '"stop_hook_active":[[:space:]]*true'; then
-  exit 0
-fi
+# Borusuz kontrol (L-0027: pipefail + pipe kalibi yok)
+case "$INPUT" in
+  *'"stop_hook_active":true'*|*'"stop_hook_active": true'*) exit 0 ;;
+esac
 
 cat <<'EOF'
 {"decision":"block","reason":"GOREV KAPANISI (BigBrain global): (1) bsa-denetci ajanini cagir, ciktisini rapora 'Denetim' bolumu olarak ekle. (2) Ders adayi varsa C:/Users/BSA/Projects/BigBrain/lessons/inbox/ altina YYYY-AA-GG-<proje>-<slug>.md yaz (bsa-denetci yazdiysa tekrar yazma). Format: ## Belirti / ## Kok Neden / ## Kural-Cozum / ## Goruldugu projeler. INDEX.md'ye DOKUNMA. (3) Ders yoksa tek satir 'Ders adayi yok' de ve bitir."}
