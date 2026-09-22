@@ -104,9 +104,17 @@ for event, entries in snippet.get("hooks", {}).items():
     for entry in entries:
         entry = json.loads(json.dumps(entry).replace("C:/Users/BSA/.claude/hooks", hooks_dir))
         matcher = entry.get("matcher")
-        cmds = [h.get("command") for h in entry.get("hooks", [])]
-        exists = any(e.get("matcher") == matcher and
-                     [h.get("command") for h in e.get("hooks", [])] == cmds for e in lst)
+        # Idempotency anahtari yola DUYARSIZ olmali: ayni betik farkli yol gosterimiyle
+        # (cygpath -m vs ham yol, CLAUDE_HOME override) iki kez kaydedilmesin (bsa-denetci ders adayi).
+        def basenames(e):
+            import os as _os
+            out = []
+            for h in e.get("hooks", []):
+                cmd = h.get("command") or ""
+                out.append(_os.path.basename(cmd.split()[-1]) if cmd.split() else cmd)
+            return sorted(out)
+        want = basenames(entry)
+        exists = any(e.get("matcher") == matcher and basenames(e) == want for e in lst)
         if not exists:
             lst.append(entry); added += 1
 with open(settings_path, "w", encoding="utf-8") as f:

@@ -35,7 +35,7 @@ Hafıza tek yönlü değil. Önemli bir bug/çözüm, tekrar eden hata ya da gen
 Yeni özelliğe başlamadan `grep -i '<konu anahtar kelimesi>' C:/Users/BSA/Projects/BigBrain/lessons/INDEX.md`; eşleşen dersleri rapora "Uygulanan dersler" olarak yaz. Detay için `grep -n '^## L-XXXX'` ile satırı bul, bloğu `sed -n` ile oku (INDEX ~80KB, 98 ders; tamamını basma — hook çıktısı 1800 byte, L-0026).
 
 ### GÜNCELLEME
-"CLAUDE.md güncelle" denildiğinde içeriği `C:\Users\BSA\.claude\CLAUDE.md`'ye yaz; `Get-Content C:\Users\BSA\.claude\CLAUDE.md | Select-Object -First 3` ile doğrula (başlıkta "GLOBAL CLAUDE.MD KURALLARI — v2.23" görünmeli). Kaynak her zaman uzak GLOBAL_CLAUDE_MD.md; lokale ek YAPMA (L-0096). Ardından L-0050 script kalıntısı kontrolü: `Select-String -Path CLAUDE.md -Pattern 'Add-Content|Get-Content|\$addition'` boş dönmeli.
+"CLAUDE.md güncelle" denildiğinde içeriği `C:\Users\BSA\.claude\CLAUDE.md`'ye yaz; `Get-Content C:\Users\BSA\.claude\CLAUDE.md | Select-Object -First 3` ile doğrula (başlıkta "GLOBAL CLAUDE.MD KURALLARI — v2.23" görünmeli). Kaynak her zaman uzak GLOBAL_CLAUDE_MD.md; lokale ek YAPMA (L-0096). Ardından L-0050 script kalıntısı kontrolü: `Select-String -Path CLAUDE.md -Pattern 'Add-Content|Get-Content|\$addition'` boş dönmeli. (L-0067: bu satırdaki yasaklı kalıplar örnek/tarama deseni; bu SKILL.md dosyası CLAUDE.md değildir, guard taramasına girmez — kalıp burada durabilir.)
 
 ### PROJELER ARASI
 Bir projede çözülen sorunu diğerine öner. Projeler: ADHD Killer, VoiceFlow, GhostX, BİLSAV PWA, EasyRide (+ projects/INDEX.md'deki güncel liste: arya-life-reborn, BlueDot, BlueDock, MarketRadar, Web-Cloner, open-design, omi vb.). Öneri sohbete yazıldıysa rapora "Proaktif notlar"a da yazılır.
