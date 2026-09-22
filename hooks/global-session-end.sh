@@ -1,5 +1,5 @@
 #!/bin/bash
-# Global Stop hook - Gorev kapanisi (BigBrain global): bsa-denetci + ders adayi (inbox) kontrolu.
+# Global Stop hook - Gorev kapanisi (BigBrain global): bsa-denetci + ders adayi (inbox) kontrolu + rapora Kapanis bolumu.
 # BigBrain inbox yolu MUTLAK; dongu korumali (stop_hook_active true -> exit 0, cikti yok).
 # install.sh bu dosyayi ~/.claude/hooks/global-session-end.sh olarak kopyalar.
 set -euo pipefail
@@ -13,5 +13,5 @@ case "$INPUT" in
 esac
 
 cat <<'EOF'
-{"decision":"block","reason":"GOREV KAPANISI (BigBrain global): (1) bsa-denetci ajanini cagir, ciktisini rapora 'Denetim' bolumu olarak ekle. (2) Ders adayi varsa C:/Users/BSA/Projects/BigBrain/lessons/inbox/ altina YYYY-AA-GG-<proje>-<slug>.md yaz (bsa-denetci yazdiysa tekrar yazma). Format: ## Belirti / ## Kok Neden / ## Kural-Cozum / ## Goruldugu projeler. INDEX.md'ye DOKUNMA. (3) Ders yoksa tek satir 'Ders adayi yok' de ve bitir."}
+{"decision":"block","reason":"GOREV KAPANISI (BigBrain global): (1) bsa-denetci ajanini cagir, ciktisini rapora 'Denetim' bolumu olarak ekle. (2) Ders adayi varsa C:/Users/BSA/Projects/BigBrain/lessons/inbox/ altina YYYY-AA-GG-<proje>-<slug>.md yaz (bsa-denetci yazdiysa tekrar yazma). Format: ## Belirti / ## Kok Neden / ## Kural-Cozum / ## Goruldugu projeler. INDEX.md'ye DOKUNMA. (3) Ders yoksa tek satir 'Ders adayi yok' de. (4) Bu kapanista yaptiklarini (denetim ozeti, inbox'a yazilan/guncellenen dosya adi, ders yoksa 'Ders adayi yok') gorev raporunun SONUNA '## Kapanis (Stop hook sonrasi)' bolumu olarak EKLE; rapor dosyasi bu turda en son yazilan sey olsun. Rapor yoksa _reports/<proje>/ altina YYYY-AA-GG-<slug>-kapanis.md yaz."}
 EOF
