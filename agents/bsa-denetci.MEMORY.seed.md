@@ -1,6 +1,7 @@
 # bsa-denetci — kalıcı hafıza (seed)
 # Faz 2'de ~/.claude/agent-memory/bsa-denetci/MEMORY.md'ye kopyalanır (ilk 25 KB her çağrıda yüklenir).
 # Format: L-XXXX (tetik: <değişen-dosya-deseni>): kural — nasıl denetlenir. Deterministik hook'ların işi burada TEKRAR edilmez; bunlar muhakeme dersleridir.
+Son ders: L-0098 (BigBrain INDEX, 2026-09-22)
 
 ## SUPABASE / DB (tetik: supabase/migrations/**, *.sql, lib/*supabase*, RLS/RPC)
 - L-0007 (canlı şema drift): feature/fix öncesi information_schema ile canlı şemaya bakıldı mı; repo migration'ı drift'ten emin mi.
