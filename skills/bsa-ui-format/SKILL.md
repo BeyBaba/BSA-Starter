@@ -81,3 +81,5 @@ description: UI/arayüz, tema, para-telefon biçimi, i18n ve responsive layout i
 - `Uygulanan dersler: L-0021, L-0071, L-0088, L-0098` (gerçekten uygulananlar).
 - Kanıt: Playwright screenshot (light + dark; 375px ve 768px+), `<select>` koyu temada okunur ekran görüntüsü, para/telefon örnek çıktıları ("₺1.234,56"; "+90 532 377 85 20" → DB "+905323778520"), i18n grep'inde hardcoded metin 0.
 - Bölümler: Sonuç / Yapılanlar / Test / Varsayımlar / Proaktif notlar / Ders adayları / Kullanılan skill/agent.
+
+Kaynak dersler: L-0021, L-0071, L-0088, L-0098

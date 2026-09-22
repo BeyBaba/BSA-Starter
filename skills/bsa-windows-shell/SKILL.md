@@ -83,3 +83,5 @@ description: Windows ortamında Bash/PowerShell tool seçimi, gh/git komutları,
 - Kanıt: hangi tool'la çalıştırıldığı (Bash/PowerShell), `--body-file` kullanıldıysa dosya adı, hook çıktısı byte sayısı (≤1800), `git status` "up to date" çıktısı, `claude mcp list` "Connected" satırı.
 - Hook tarafından bloklanan komut varsa hook mesajı + uygulanan alternatif.
 - Bölümler: Sonuç / Yapılanlar / Test / Varsayımlar / Proaktif notlar / Ders adayları / Kullanılan skill/agent.
+
+Kaynak dersler: L-0015, L-0018, L-0019, L-0026, L-0027, L-0029, L-0030, L-0031, L-0041, L-0050, L-0051, L-0060, L-0061, L-0063, L-0064, L-0066, L-0067, L-0068, L-0070, L-0077, L-0078, L-0079, L-0083, L-0084, L-0085, L-0086, L-0087, L-0097

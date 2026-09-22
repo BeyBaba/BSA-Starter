@@ -81,3 +81,5 @@ Sürüm push kararı: `semver.diff(prev, next)` → `minor`/`major` ise push, `p
 - Kanıt: güncelleme modalinin ekran görüntüsü (Playwright, `test-results/update-modal.png`), `CACHE_NAME`/`package.json` sürüm eşitliği (`grep` çıktısı), `git status`'ta `sw.js` stage'lenmediği, izin isteği yerlerinin listesi (tek modal).
 - Platform kısıtı varsa özellik raporu: `❌ BU PLATFORMDA İMKANSIZ — [neden]` / `⚠️ YAZILDI AMA AKTİF DEĞİL — [aktivasyon adımı: örn. Ana Ekrana Ekle]`.
 - Sürüm çıkışında push gönderilip gönderilmediği ve gerekçesi (patch/minor/major).
+
+Kaynak dersler: L-0004, L-0005, L-0010, L-0013, L-0021, L-0033, L-0040, L-0088

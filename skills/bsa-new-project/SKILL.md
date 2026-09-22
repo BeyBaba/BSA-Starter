@@ -21,14 +21,14 @@ description: Yeni bir BSA projesi açılırken ("yeni proje", "Use this template
 
 ## Kurallar (BigBrain dersleri)
 - **L-0001** — Vercel serverless'ta SQLite / lokal dosya DB / `execSync` çalışmaz (`/tmp` her cold start'ta sıfırlanır; veri kaybolur). Zorunlu: Vercel + Supabase (PostgreSQL). Kontrol: DB Supabase mi, `DATABASE_URL` Supabase connection string mi, Vercel env'e eklendi mi. (VoiceFlow, BlueDock, easyride)
-- **L-0025** — Yeni projede auth/payment koduna `savasarac@gmail.com` için lifetime/bypass kontrolü EKLENMELİ (iyzico/Stripe olsun olmasın); unutulursa super user trial/rate limit/ödeme ekranına takılır. (ADHD-Killer-Pro-Project, VoiceFlow, MarketRadar)
+- **L-0025** — Yeni projede auth/payment koduna `<super-user-email>` (gerçek adres: GLOBAL_CLAUDE_MD.v2.23.archive.md BLOK 18 ve proje kodundaki SUPER_USERS listesi; skill dosyasına yazılmaz) için lifetime/bypass kontrolü EKLENMELİ (iyzico/Stripe olsun olmasın); unutulursa super user trial/rate limit/ödeme ekranına takılır. (ADHD-Killer-Pro-Project, VoiceFlow, MarketRadar)
 
 ## v2.23'ten taşınan bloklar
 
 ### ZORUNLU STACK (BÖLÜM B)
 - Frontend: Next.js 15 + TypeScript + Tailwind CSS + shadcn/ui
 - Backend: Supabase (PostgreSQL) — ZORUNLU. Deploy: Vercel — ZORUNLU.
-- Supabase org: giddtvgowtnloabwsvin | Region: eu-west-2
+- Supabase org: <supabase-org-id> (gerçek değer: arşiv BÖLÜM B) | Region: eu-west-2
 - SQLite + execSync YASAK. Vercel + SQLite YASAK. Vercel + lokal DB YASAK.
 - Her proje ayrı Supabase projesi (ortak proje/şema paylaşımı yok). Duplicate deploy kontrolü yap: aynı adla ikinci Vercel veya Supabase projesi açma.
 - PAKET YÖNETİMİ (v2.14): Vercel pnpm + frozen-lockfile kullanır. Paket eklerken `pnpm install` ile package.json + pnpm-lock.yaml'ı BİRLİKTE commit et. Sadece package-lock.json commit etme → build ERR_PNPM_OUTDATED_LOCKFILE ile patlar. npm kullanıldıysa sonra `pnpm install --lockfile-only` çalıştır.
@@ -83,10 +83,10 @@ Aydınlatma metni, sağlık verisi koruma, hesap silme hakkı. (Sağlık/kişise
 ### BLOK 15 — DENEME SÜRESİ & ÖDEME
 40 gün ücretsiz deneme, profilde kalan gün göstergesi.
 Ödeme entegrasyonu: iyzico (Türkiye) + Stripe (global) — ikisi birlikte desteklenmeli.
-savasarac@gmail.com SUPER USER: deneme süresi YOK, otomatik LİFETİME üye. Super user kontrolü her projede auth/payment koduna EKLENMELİDİR.
+`<super-user-email>` SUPER USER: deneme süresi YOK, otomatik LİFETİME üye. Super user kontrolü her projede auth/payment koduna EKLENMELİDİR.
 
 ### BLOK 18 — SUPER USER KURALI
-- savasarac@gmail.com hesabı SUPER USER'dir.
+- `<super-user-email>` hesabı SUPER USER'dir (gerçek adres: arşiv BLOK 18 ve proje kodundaki SUPER_USERS listesi).
 - Rate limit, plan kısıtlaması, trial süresi, ödeme ekranı bu hesap için GEÇERLİ DEĞİLDİR.
 - Super user girişinde otomatik LİFETİME plan atanır — ödeme adımı atlanır.
 - Bu kural TÜM projelerde geçerlidir (iyzico veya Stripe entegrasyonu olsun olmasın).
@@ -124,3 +124,5 @@ Kullanıcı onaylamadan dokunma. (BLOK 0d "ONAY AL" adımı bu kuralın uygulama
 - Duplicate deploy kontrolü sonucu (Vercel/Supabase proje adları, region eu-west-2).
 - Retroaktif uyarı verildiyse metni ve kullanıcının kararı.
 - Deploy linki (İNDİRME LİNKİ: web → deploy linki; ASLA linksiz "hazır" deme).
+
+Kaynak dersler: L-0001, L-0016, L-0025, L-0062, L-0092

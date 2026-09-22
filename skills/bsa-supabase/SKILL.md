@@ -75,7 +75,7 @@ Canlı uygulama: `npx supabase db push --linked --dry-run` → çıktıyı rapor
 - **L-0035** — Vercel function body limiti ~4.5MB (base64 +%33); dosyayı istemciden doğrudan Supabase Storage bucket'a yükle, API route yalnız URL'yi kaydetsin (alternatif Vercel Blob).
 
 ## v2.23'ten taşınan bloklar
-**ZORUNLU STACK:** Supabase org: giddtvgowtnloabwsvin | Region: eu-west-2. Her proje ayrı Supabase projesi; duplicate deploy kontrolü yap.
+**ZORUNLU STACK:** Supabase org: <supabase-org-id> (gerçek değer: arşiv BÖLÜM B) | Region: eu-west-2. Her proje ayrı Supabase projesi; duplicate deploy kontrolü yap.
 
 **BLOK 13 — SUPABASE**
 - Her tabloda RLS aktif. Yeni tablo = RLS zorunlu. İstemci yazmaları SECURITY DEFINER RPC üzerinden; tabloya doğrudan write yok.
@@ -91,3 +91,5 @@ Canlı uygulama: `npx supabase db push --linked --dry-run` → çıktıyı rapor
 - `Uygulanan dersler: L-...` satırı — yalnız gerçekten uygulananlar, numaralarıyla.
 - Kanıt: canlı şema sorgusu çıktısı (tablo + kolonlar), migration dosya adı/numarası, `db push` dry-run çıktısı, backfill DRY (rollback) sonucu; RLS için policy adı + `(select ...)` sarımı; RPC için `SET search_path = public` + auth guard satırı.
 - Ertelenen migration varsa "Varsayım: canlı doğrulama sonra" notu; canlı push/merge için bekleyen onay maddesi.
+
+Kaynak dersler: L-0002, L-0003, L-0007, L-0016, L-0017, L-0034, L-0035, L-0052, L-0053, L-0055, L-0056, L-0058, L-0072, L-0074, L-0076, L-0081, L-0082, L-0089, L-0092, L-0093, L-0095

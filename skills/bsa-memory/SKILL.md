@@ -74,7 +74,13 @@ Rapor yolu: `C:\Users\BSA\Projects\_reports\<proje>\<tarih>-<isim>.md`; kopyası
 - **Ders adayları** — inbox dosya adları; yoksa "yok".
 - **Kullanılan skill/agent** — 🧰 hangi skill/plugin/MCP, somut katkısı (örn. "context7: Next.js 15 cache API'si değişmişti"); hiçbiri yoksa "kullanılmadı" — sessiz geçme.
 - **Denetim** — bsa-denetci çıktısı birebir (İHLAL / UYARI / TEMİZ + "Denetlenen dosya: N | İhlal: n | Uyarı: n").
-Bug çözümünde DEBUG RAPOR FORMATI (bug neydi / çözüm / kanıt / merge / bu turda çözülenler) Sonuç'un altına eklenir. Session sonunda ayrıca "=== BigBrain SESSION OZET ===" bloğu.
+Bug çözümünde DEBUG RAPOR FORMATI Sonuç'un altına 5 başlıkla eklenir:
+  1. Bug neydi ve neden oluyordu
+  2. Çözüm
+  3. Kanıt (test / log / ekran görüntüsü)
+  4. Test geçti; merge kararı Savaş'ın (PR URL) — v2.23'teki "kuralımız gereği merge ediyorum" v3.0 çekirdeğinde geçersiz; merge kararı Savaş'ın (bsa-release BLOK 5)
+  5. Bu turda çözülenler (kısa özet liste)
+Session sonunda ayrıca "=== BigBrain SESSION OZET ===" bloğu.
 
 ## bsa-denetci çağırma
 - Zaman: görev/branch bittiğinde, PR açmadan (veya merge'den) önce; diff hazır olmalı (`git diff main...HEAD --stat`).
@@ -88,3 +94,5 @@ Bug çözümünde DEBUG RAPOR FORMATI (bug neydi / çözüm / kanıt / merge / b
 - Kural senkronizasyon sorusu soruldu mu, cevabı ve açılan BSA-Starter PR linki.
 - Referans modeli ihlali (proje CLAUDE.md'de global metin/sürüm) tespit edildiyse uyarı metni ve kullanıcı kararı.
 - Mükerrer ders kontrolü sonucu (eşleşen L-XXXX veya "yeni aday").
+
+Kaynak dersler: L-0014, L-0016, L-0023, L-0026, L-0048, L-0050, L-0067, L-0083, L-0092, L-0096

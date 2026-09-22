@@ -13,7 +13,7 @@ Kurulum: `bash hooks/install.sh` → `~/.claude/skills/<ad>/SKILL.md`. Kaynak te
 | `bsa-windows-shell` | `*.ps1`, `*.sh`, hook/komut içeren iş, MCP/araç tuzakları | L-0015/0019/0026/0027/0029/0030/0031/0041/0051/0060/0063/0064/0066/0068/0070/0077/0078/0079/0083/0084/0085/0086/0087/0097 + BLOK 23 PS kuralı |
 | `bsa-ui-format` | `*.tsx`, `globals.css`, para/telefon biçimi, tema, i18n, Material You | L-0071/0088/0098 + BLOK 7/8/11/17/20/24 |
 | `bsa-new-project` | yeni repo / eski proje devralma / platform-stack kararı / super user / KVKK | L-0001/0025 + BLOK 0/0.5/1/2/3/12/15/18/19 + istisna kategorileri |
-| `bsa-hooks` | hook yazma/değiştirme, settings.json, oturum sürekliliği | L-0049/0062/0065 (+0026/0050/0063/0083) + BLOK 23 |
+| `bsa-hooks` | hook yazma/değiştirme, settings.json, oturum sürekliliği | L-0049/0062/0065 (+0026/0027/0050/0063/0083) + BLOK 23 |
 | `bsa-memory` | BigBrain okuma/yazma, ders adayı, CLAUDE.md referans modeli, rapor şablonu | L-0048/0096 (+0023/0092) + HAFIZA/DERS YAZ/KURAL SENK. |
 
 Eşleme kaynağı: `_reports\bigbrain\2026-09-22-global-v3-eslestirme.md` (60 v2.23 birimi → hedef; kayıp 0).

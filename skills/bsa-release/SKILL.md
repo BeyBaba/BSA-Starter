@@ -37,7 +37,7 @@ description: Sürüm çıkarma, PR/merge, tag/release, Vercel deploy ve GitHub A
 - **L-0080** — Büyük binary (ZIP/MP4/PDF, ~100MB blob limiti) git'e girmesin; push HTTP 408/500 "send-pack: unexpected disconnect" bunun belirtisi. İlk commit'ten önce `.gitignore`'a `*.zip *.mp4 *.mov *.tif *.psd`; `git config http.postBuffer 524288000`; push öncesi `git ls-tree -r -l HEAD | awk '$4>95000000'` boş olmalı. Girdiyse `git reset --soft origin/master` → temiz commit; kalıcıysa `git filter-repo`. Büyük dosya → Drive/Releases/LFS. (hook `git add *.zip` vb. yakalar)
 
 ### Production launch
-- **L-0036** — Geliştirmede tüm email alanları (VAPID_CONTACT_EMAIL, RESEND_FROM_EMAIL, iyzico kontak, sözleşme şablonları) savasarac@gmail.com; production'a gmail.com ile çıkmak YASAK. Yeni email-related özellik eklenince "launch öncesi domain email ile değiştir" listesine ekle; "launch yaklaşıyor" denince listeyi proaktif göster.
+- **L-0036** — Geliştirmede tüm email alanları (VAPID_CONTACT_EMAIL, RESEND_FROM_EMAIL, iyzico kontak, sözleşme şablonları) `<dev-email>` (gerçek adres: GLOBAL_CLAUDE_MD.v2.23.archive.md BLOK 18 super user adresi; skill dosyasına yazılmaz); production'a gmail.com ile çıkmak YASAK. Yeni email-related özellik eklenince "launch öncesi domain email ile değiştir" listesine ekle; "launch yaklaşıyor" denince listeyi proaktif göster.
 
 ### Vercel
 - **L-0006** — Vercel pnpm + frozen-lockfile: sadece `package-lock.json` commit etmek `ERR_PNPM_OUTDATED_LOCKFILE` verir. Paket eklerken `pnpm install <pkg>`, `package.json` + `pnpm-lock.yaml` BİRLİKTE commit; npm kullanıldıysa sonra `pnpm install --lockfile-only`.
@@ -52,7 +52,7 @@ Her anlamlı değişiklik grubu (yeni özellik, bug fix, refactor) tamamlandığ
 2. `package.json` semver bump: yeni proje / MVP'ye ulaşmış proje 1.0.0'dan başlar (0.x yalnız ilk 3 gün deneme); feat: → MINOR (1.0.0 → 1.1.0); fix: → PATCH (1.0.0 → 1.0.1); BREAKING CHANGE footer → MAJOR (1.0.0 → 2.0.0); yalnız docs:/test:/refactor: → bump YOK.
 3. `CHANGELOG.md`'ye Keep a Changelog formatında ekle.
 4. main'e DOĞRUDAN push YASAK (hook da yakalar) — feature branch → PR → kullanıcıya URL.
-5. PR merge sonrası: `git tag vX.Y.Z`, `git push origin vX.Y.Z`, ardından `gh release view vX.Y.Z` (release.yml otomatik oluşturduysa `gh release create` ETME — L-0073).
+5. PR merge sonrası: `git tag vX.Y.Z` + `git push origin vX.Y.Z`; `release.yml` varsa tag push release'i otomatik üretir — elle `gh release create` YAPMA, `gh release view vX.Y.Z` ile doğrula (L-0073); yoksa `gh release create vX.Y.Z --notes-file <changelog-parçası>`.
 6. auto-release skill'i varsa onu kullan.
 7. Kullanıcıya release özeti göster.
 
@@ -85,3 +85,5 @@ Her anlamlı değişiklik grubu (yeni özellik, bug fix, refactor) tamamlandığ
 - Kanıt: tsc/build çıktısı (0 hata), PR URL, `gh pr view --json state,mergedAt` çıktısı (MERGED), `gh release view vX.Y.Z` çıktısı, deploy/release linki, yeni sürüm numarası.
 - Merge bloklandıysa: "BLOKE — interaktif onay bekliyor" + tamamlanan bağımsız adımlar.
 - Bölümler: Sonuç / Yapılanlar / Test / Varsayımlar / Proaktif notlar / Ders adayları / Kullanılan skill/agent.
+
+Kaynak dersler: L-0006, L-0008, L-0009, L-0012, L-0028, L-0036, L-0054, L-0057, L-0069, L-0073, L-0080, L-0092, L-0094

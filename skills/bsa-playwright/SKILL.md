@@ -87,3 +87,5 @@ Koşu: `pnpm playwright test --workers=1` (projede `pnpm test:e2e` varsa onu kul
 - **Test** bölümü zorunlu içerik: `tsc --noEmit` sonucu (0 hata), `pnpm build` sonucu, Playwright özeti **passed / failed / skipped** sayılarıyla (skipped > 0 ise nedeni), ekran görüntüsü dosya yolları (`test-results/*.png`).
 - DB'ye bağımlı test ertelendiyse "Varsayım: canlı doğrulama sonra" (L-0072 ile uyumlu).
 - Prod doğrulama yapıldıysa yöntem (tarayıcı/Playwright, istek sayısı) ve görülen sürüm etiketi.
+
+Kaynak dersler: L-0019, L-0020, L-0021, L-0037, L-0039, L-0041, L-0042, L-0044, L-0046, L-0047, L-0072, L-0090, L-0091, L-0092
