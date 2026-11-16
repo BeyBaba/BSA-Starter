@@ -1,6 +1,6 @@
-GLOBAL CLAUDE.MD KURALLARI — v3.0 (çekirdek)
+GLOBAL CLAUDE.MD KURALLARI — v3.1 (çekirdek)
 
-SESSION: "Global CLAUDE.md v3.0 aktif" bildir. Bu dosya yalnız ÇEKİRDEK'tir: alan bilgisi skill'lerde,
+SESSION: "Global CLAUDE.md v3.1 aktif" bildir. Bu dosya yalnız ÇEKİRDEK'tir: alan bilgisi skill'lerde,
 deterministik yasaklar hook'ta, diff muhakemesi bsa-denetci'de. Kaynak tek yer: BSA-Starter/GLOBAL_CLAUDE_MD.md.
 
 KİMLİK/İLETİŞİM: Kullanıcı Savaş; TR-EN karışık, kısa/sesli olabilir; emin değilsen sor, tahmin etme.
@@ -26,6 +26,9 @@ HAFIZA (skill/ajan yönlendirmesi): Görev BAŞINDA ilgili skill'i çağır — 
 bsa-playwright / bsa-windows-shell / bsa-ui-format / bsa-new-project / bsa-hooks / bsa-memory; ayrıca
 `grep -i <konu> BigBrain/lessons/INDEX.md` ile ilgili L derslerini "Uygulanan dersler"e yaz. Görev SONUNDA `bsa-denetci`'yi
 çağır, çıktısını rapora "Denetim" bölümü koy. Yeni ders adayını bsa-denetci inbox'a yazar (INDEX'e triyajda girer, doğrudan yazma).
+BULUT/TELEFON OTURUMU (v3.1): BigBrain yerelde yoksa (claude.ai/code, mobil) işe başlamadan BeyBaba/BigBrain'i oturuma ekle
+(add_repo) ve dersleri oradan tara; ekleyemiyorsan kullanıcıya söyle, "yüklendi" varsayma. Hook "YUKLENEMEDI" derse aynı kural.
+Bulutta `_reports` yazılamaz: rapor kullanıcıya dosya olarak verilir. Global kural BSA-Starter + BigBrain'de PARALEL ve AYNI tutulur.
 
 ÇOKLU AJAN: 3+ birbirinden bağımsız dosya/konu → paralel subagent (dosya sahipliği ayrık); tek dosya işleri sıralı.
 
@@ -34,4 +37,5 @@ lokal kopya senkronda silinir). Sürüm drift'i fark edilince bildir.
 
 v3.0 — yalnız çekirdek. Arşiv: GLOBAL_CLAUDE_MD.v2.23.archive.md. Eşleme: _reports\bigbrain\2026-09-22-global-v3-eslestirme.md. Kurulum/doğrulama: bash hooks/install.sh, bsa doctor.
 
-SÜRÜM GEÇMİŞİ: v3.0 (2026-09-22) — v2.23 (418 satır) çekirdeğe indirildi; alan bilgisi skills/bsa-* (9), deterministik yasaklar hooks/rules.txt, diff muhakemesi agents/bsa-denetci.
+SÜRÜM GEÇMİŞİ: v3.1 (2026-11-16) — bulut/telefon oturumu HAFIZA kuralı; şablon SessionStart hook'u BigBrain'i
+yerelde arar, yoksa sparse klonlar, olmazsa "YUKLENEMEDI" der (önceden ders yokken de "yüklendi" diyordu; InsCleaner). v3.0 (2026-09-22) — v2.23 (418 satır) çekirdeğe indirildi; alan bilgisi skills/bsa-* (9), deterministik yasaklar hooks/rules.txt, diff muhakemesi agents/bsa-denetci.

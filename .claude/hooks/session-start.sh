@@ -2,33 +2,62 @@
 # SessionStart hook - BigBrain hafizasini context'e enjekte eder.
 # Tasinabilirlik: jq -> python3 -> python -> node fallback zinciri.
 # Hicbiri yoksa gorunur uyari basar (sessiz cokme YASAK - kontrol noktasi).
-set -euo pipefail
+# v3.1: Dersler proje klasorunde degil BigBrain'de durur. Sirayla aranir:
+#   proje (BigBrain'in kendisi) -> ../BigBrain -> ~/Projects/BigBrain -> ~/.cache/bigbrain
+#   -> bulunamazsa sparse klon denenir (bulut oturumu). Yine yoksa "YUKLENEMEDI" uyarisi (asla sahte "yuklendi" yok).
+set -uo pipefail
 
 # Global hook varsa devre disi kal (L-0062 cift tetikleme korumasi)
 [ -f "$HOME/.claude/hooks/global-session-start.sh" ] && exit 0
 
 DIR="${CLAUDE_PROJECT_DIR:-.}"
+REPO_URL="${BIGBRAIN_REPO_URL:-https://github.com/BeyBaba/BigBrain}"
+CACHE="${BIGBRAIN_CACHE:-$HOME/.cache/bigbrain}"
 OUT="$(mktemp)"
 trap 'rm -f "$OUT" "$OUT.tmp"' EXIT
 
+find_bigbrain() {
+  local d
+  for d in "$DIR" "$DIR/../BigBrain" "$DIR/../bigbrain" "$HOME/Projects/BigBrain" "$CACHE"; do
+    if [ -f "$d/lessons/INDEX.md" ]; then echo "$d"; return 0; fi
+  done
+  return 1
+}
+
+BB="$(find_bigbrain)"
+CLONE_NOTE=""
+if [ -z "$BB" ] && command -v git >/dev/null 2>&1; then
+  # Bulut oturumu: kucuk sparse klon (yalniz lessons + projects), 25 sn sinir; basarisizsa sessiz degil, asagida uyarir
+  rm -rf "$CACHE.tmp"
+  if timeout 25 git clone -q --depth 1 --filter=blob:none --sparse "$REPO_URL" "$CACHE.tmp" >/dev/null 2>&1 \
+     && git -C "$CACHE.tmp" sparse-checkout set lessons projects >/dev/null 2>&1; then
+    rm -rf "$CACHE" && mv "$CACHE.tmp" "$CACHE"
+    BB="$CACHE"
+    CLONE_NOTE=" (BigBrain bu oturum icin indirildi: $CACHE)"
+  else
+    rm -rf "$CACHE.tmp"
+  fi
+fi
+
 {
-  echo "BigBrain hafizasi yuklendi (SessionStart hook)."
-  echo "Gecmis projelerden cikarilmis dersleri (L-XXXX) dikkate al, ayni hatayi tekrarlama."
-  echo
-  if [ -f "$DIR/lessons/INDEX.md" ]; then
-    DERS_SAYISI=$(grep -c '^## L-' "$DIR/lessons/INDEX.md" 2>/dev/null || echo 0)
+  if [ -n "$BB" ]; then
+    echo "BigBrain hafizasi yuklendi (SessionStart hook)$CLONE_NOTE."
+    echo "Gecmis projelerden cikarilmis dersleri (L-XXXX) dikkate al, ayni hatayi tekrarlama."
+    echo
+    DERS_SAYISI=$(grep -c '^## L-' "$BB/lessons/INDEX.md" 2>/dev/null || echo 0)
     echo "=== DERSLER (Toplam: $DERS_SAYISI, son 12 gosteriliyor) ==="
-    grep '^## L-' "$DIR/lessons/INDEX.md" 2>/dev/null | tail -12 || true
-    echo "Onceki dersler ve detay icin lessons/INDEX.md oku."
+    grep '^## L-' "$BB/lessons/INDEX.md" 2>/dev/null | tail -12 || true
     echo
+    if [ -f "$BB/projects/INDEX.md" ]; then
+      PROJE_SAYISI=$(grep -cE '^\| [^-]' "$BB/projects/INDEX.md" 2>/dev/null || echo 0)
+      echo "=== PROJELER (Toplam: $PROJE_SAYISI) === Detay: $BB/projects/INDEX.md"
+    fi
+    echo "Gorev basinda ilgili dersleri ara: grep -i <konu> $BB/lessons/INDEX.md"
+  else
+    echo "UYARI: BigBrain hafizasi YUKLENEMEDI - dersler bu oturumda YOK (yerelde bulunamadi, indirilemedi)."
+    echo "Bulut oturumundaysan: BeyBaba/BigBrain reposunu oturuma ekle (add_repo) ve lessons/INDEX.md'yi tara."
+    echo "Ekleyemiyorsan ise baslamadan kullaniciya bildir (global kural v3.1 HAFIZA)."
   fi
-  if [ -f "$DIR/projects/INDEX.md" ]; then
-    PROJE_SAYISI=$(grep -cE '^\| [^-]' "$DIR/projects/INDEX.md" 2>/dev/null || echo 0)
-    echo "=== PROJELER (Toplam: $PROJE_SAYISI) ==="
-    echo "Detay: projects/INDEX.md"
-    echo
-  fi
-  echo "Detay gerekirse: lessons/INDEX.md ve projects/INDEX.md dosyalarini oku."
 } > "$OUT"
 head -c 1800 "$OUT" > "$OUT.tmp" && mv "$OUT.tmp" "$OUT"
 
