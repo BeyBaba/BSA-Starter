@@ -1,6 +1,6 @@
 # skills/ — Hafıza v3 alan bilgisi skill'leri (bsa-*)
 
-Çekirdek GLOBAL (v3.0) yalnız her oturumda gereken kuralları taşır; alan bilgisi bu skill'lerde.
+Çekirdek GLOBAL (v3.1) yalnız her oturumda gereken kuralları taşır; alan bilgisi bu skill'lerde.
 Görev BAŞINDA ilgili skill çağrılır (dosya deseni/iş türü tetikler), rapora "Uygulanan dersler: L-..." yazılır.
 Kurulum: `bash hooks/install.sh` → `~/.claude/skills/<ad>/SKILL.md`. Kaynak tek yer burasıdır (L-0096).
 
