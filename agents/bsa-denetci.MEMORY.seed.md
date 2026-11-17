@@ -27,6 +27,8 @@ Son ders: L-0098 (BigBrain INDEX, 2026-09-22)
 - L-0083 (stop-hook): rapor/dokümana örnek shell komutu Write tool ile mi yazıldı (PowerShell here-string hook'a takılır).
 - L-0092 (mevcut kodu oku): "yeni özellik" öncesi gh pr list + git branch -a + grep yapıldı mı; paralel oturum çoktan yapmış olabilir.
 - L-0045 (dosya arama): tek lokasyon değil çoklu + recursive geri düşüş.
+- v3.2 (makine-bağımsız yol): diff'te sabit `C:\Users\<ad>`, `/c/Users/<ad>`, `/c/Python3xx` yolu → UYARI; `$env:USERPROFILE` / `$HOME` / `BIGBRAIN_DIR` + araç aday zinciri (`--version` doğrulamalı, WindowsApps sahtesi atlanır) olmalı. Örnek/doküman yolları (`<ad>` yer tutucu) hariç.
+- v3.2 (hook bash): `settings.json` hook komutu çıplak `bash ` ile başlıyorsa → UYARI; WSL'li makinede WSL bash'ine düşer, Windows yolları kırılır. Git-bash tam yolu (tırnaklı) olmalı (`bash hooks/install.sh` taşır).
 
 ## UI / PWA / FORMAT (tetik: *.tsx, globals.css, format/telefon)
 - L-0098 (biçim): para formatMoney 2-hane "1.234,56"; telefon E.164 + PhoneInput; wa.me E.164'ten.
