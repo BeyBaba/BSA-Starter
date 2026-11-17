@@ -58,6 +58,27 @@ command -v git >/dev/null 2>&1 && ok "git: $(git --version 2>&1)" || bad "git yo
 command -v gh  >/dev/null 2>&1 && ok "gh: $(gh --version 2>&1 | head -1)" || wrn "gh CLI yok (PR/release adimlari elle)"
 command -v node >/dev/null 2>&1 && ok "node: $(node --version 2>&1)" || wrn "node yok (stdio MCP'ler npx ister)"
 command -v claude >/dev/null 2>&1 && ok "claude CLI: $(claude --version 2>&1 | head -1)" || wrn "claude CLI PATH'te yok"
+# Windows: PowerShell ExecutionPolicy Restricted/Undefined -> npm claude.ps1 shim'i PS'de calismaz (bootstrap v6.2)
+case "$(uname -s 2>/dev/null)" in
+  MINGW*|MSYS*|CYGWIN*)
+    if command -v powershell >/dev/null 2>&1; then
+      ep_cu="$(powershell -NoProfile -Command "Get-ExecutionPolicy -Scope CurrentUser" 2>/dev/null | tr -d '\r ')"
+      ep_lm="$(powershell -NoProfile -Command "Get-ExecutionPolicy -Scope LocalMachine" 2>/dev/null | tr -d '\r ')"
+      case "$ep_cu" in
+        Restricted|Undefined|"")
+          case "$ep_lm" in
+            Restricted|Undefined|"") wrn "PS ExecutionPolicy CurrentUser=${ep_cu:-?} LocalMachine=${ep_lm:-?}: PS'de claude acilmaz (Set-ExecutionPolicy RemoteSigned -Scope CurrentUser)" ;;
+            *) ok "PS ExecutionPolicy: LocalMachine=$ep_lm (CurrentUser=${ep_cu:-?})" ;;
+          esac ;;
+        *) ok "PS ExecutionPolicy: CurrentUser=$ep_cu" ;;
+      esac
+    else wrn "powershell PATH'te yok; ExecutionPolicy denetlenemedi"; fi ;;
+esac
+# claude CLI giris durumu (auth status JSON -> "loggedIn": true)
+if command -v claude >/dev/null 2>&1; then
+  if claude auth status 2>/dev/null | grep -qE '"loggedIn"[[:space:]]*:[[:space:]]*true'; then ok "claude CLI girisli (auth status loggedIn=true)"
+  else wrn "claude CLI girissiz (claude auth login)"; fi
+fi
 
 echo "--- 2) hook dosyalari (dosyalar)"
 for f in pre-bash-guard.sh pre-write-guard.sh pre-compact.sh rules.txt test-guards.sh bsa-doctor.sh bsa.sh; do
