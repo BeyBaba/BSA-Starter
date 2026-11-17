@@ -15,12 +15,12 @@
 
 ## Kurulum (Windows, Git Bash; PowerShell'den `bash hooks/install.sh` yazılır)
 ```
-cd C:\Users\BSA\Projects\BSA-Starter
+cd $env:USERPROFILE\Projects\BSA-Starter
 bash hooks/install.sh --dry-run
 bash hooks/install.sh --seed-memory
 bash hooks/bsa-doctor.sh
 ```
-Sonra (bir kez, elle): PATH'e `C:\Users\BSA\.bsa` ekle → PowerShell/cmd'den `bsa doctor`, `bsa sync`.
+Sonra (bir kez, elle): PATH'e `%USERPROFILE%\.bsa` ekle → PowerShell/cmd'den `bsa doctor`, `bsa sync`.
 
 install.sh bayrakları: `--dry-run` (yazma, listele) · `--seed-memory` (MEMORY.md'yi yedekleyip seed ile ez; yalnız ilk kurulum / seed güncellemesi) · `--no-doctor` · `--no-global` (`~/.claude/CLAUDE.md` adımını atla).
 Ortam: `CLAUDE_HOME` (vars. `~/.claude`), `BSA_HOME` (vars. `~/.bsa`).
@@ -54,7 +54,7 @@ Bayraklar: `--offline` (git fetch yok, mevcut ref'ler) · `--quick` (bölüm 6 g
 Çıktı sonu:
 ```
 === SONUC: PASS=n WARN=n FAIL=n ===
-v2.23 senkron          <- FAIL yok ve DRIFT boş (sürüm = repo GLOBAL_CLAUDE_MD.md)
+v3.2 senkron           <- FAIL yok ve DRIFT boş (sürüm = repo GLOBAL_CLAUDE_MD.md)
 DRIFT: denetci-memory,BigBrain-main   <- aksi halde (WARN kaynaklı drift'ler de listede)
 ```
 Exit: FAIL varsa 1, yoksa 0 — WARN ve DRIFT exit kodunu etkilemez. Global sürüm farkı WARN'dır (global v3.0 PR'ı merge edilene kadar beklenen drift).
