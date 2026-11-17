@@ -40,7 +40,8 @@ description: Yeni bir BSA projesi açılırken ("yeni proje", "Use this template
 - Üretilen CLAUDE.md referans modelindedir: global kural METNİ kopyalanmaz, sürüm numarası yazılmaz; tek kaynak https://raw.githubusercontent.com/BeyBaba/BSA-Starter/main/GLOBAL_CLAUDE_MD.md ; `BSA_SCOPE = true` satırı korunur.
 - `<yerel-yolu-buraya-ekle>`, `<projenin-amacini-buraya-ekle>`, `<deploy-url-buraya-ekle>` yer tutucularını gerçek değerle doldur (PLACEHOLDER YASAK).
 - package.json `version` = 1.0.0 (BLOK 22; 0.x yalnız ilk 3 gün deneme aşamasında).
-- GITHUB ACTIONS: workflow varsa manuel build komutu verme; yoksa "ekleyelim mi?" sor.
+- GITHUB ACTIONS: workflow varsa manuel build komutu verme; yoksa "ekleyelim mi?" sor. Yeni projede `bsa-starter/.github/workflows/ci.yml` + `release.yml` + `.gitattributes` (LF) kopyalanir; repo CI'siz acilmaz.
+- CLAUDE.md GUNCELLIGI: spec onayi, ilk prod deploy, urun adi veya stack sapmasi degisince proje CLAUDE.md'si ayni PR'da guncellenir (Production URL, stack satiri, spec/plan yollari, surum/faz durumu).
 
 ### BLOK 0 — ESKİ PROJE
 - 0a: `git log --oneline -30`, `git branch -a`, `git status` → özet sun

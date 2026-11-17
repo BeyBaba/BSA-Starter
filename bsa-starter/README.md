@@ -7,6 +7,8 @@ BSA tüm projeleri için başlangıç şablonu.
 - ✅ Otomatik `CLAUDE.md` üretimi (GitHub Actions)
 - ✅ Stack tespiti: Node.js, TypeScript, Electron, Python, Rust, Swift, Kotlin, Flutter, Go
 - ✅ Her bilgisayarda `git clone` = CLAUDE.md hazır
+- ✅ CI (`ci.yml`): PR ve main push'unda typecheck + test + build (npm/pnpm otomatik)
+- ✅ Release (`release.yml`): `vX.Y.Z` tag push'unda CHANGELOG bölümünden GitHub release (tag = package.json kontrolü)
 
 ## Nasıl Kullanılır
 
