@@ -133,7 +133,12 @@ if windows:
                 elif exe.lower().endswith("bash.exe") and not exists(exe):
                     print(f"WARN  {ev} hook bash yolu yok: {exe}")
 # Kayitli olmasi beklenen diger global hook'lar (eksikse WARN; FAIL degil)
-optional = {"PreCompact": ("pre-compact.sh", "CONTEXT-DRIFT ihlali loglanmaz")}
+optional = {
+    "PreCompact": ("pre-compact.sh", "CONTEXT-DRIFT ihlali loglanmaz"),
+    # Proje hook'lari global dosya varsa exit 0 yapar (L-0062) -> global kayit yoksa hafiza HIC enjekte edilmez
+    "SessionStart": ("global-session-start.sh", "BigBrain hafizasi oturuma enjekte edilmez"),
+    "Stop": ("global-session-end.sh", "gorev kapanisi / ders kontrolu calismaz"),
+}
 for ev, (script, why) in optional.items():
     entries = s.get("hooks", {}).get(ev, [])
     if any(script in (h.get("command") or "") for e in entries for h in e.get("hooks", [])):
