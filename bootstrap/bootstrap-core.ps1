@@ -64,6 +64,16 @@ function ClaudeLoggedIn {
   } catch {}
   return $null
 }
+# git-bash tam yolu (git.exe'nin iki ust klasoru\bin\bash.exe; ucrt64/mingw64 duzenleri icin bir ust daha); bulunamazsa $null
+function GitBash {
+  $g = Get-Command git -ErrorAction SilentlyContinue | Select-Object -First 1
+  if (-not $g) { return $null }
+  $d = Split-Path $g.Source
+  foreach ($root in @((Split-Path $d), (Split-Path (Split-Path $d)))) {
+    if ($root) { $b = Join-Path $root "bin\bash.exe"; if (Test-Path $b) { return $b } }
+  }
+  return $null
+}
 # Interaktif login'i AYRI pencerede baslatir; kimlik bilgisini kullanici tarayicida verir
 function AyriPencere($cmd) { Start-Process powershell -ArgumentList '-NoExit', '-Command', $cmd }
 function NodeMajor { if (Have node) { try { return [int](((node --version) -replace "v", "").Split(".")[0]) } catch { return 0 } }; return 0 }
@@ -189,16 +199,18 @@ function Renkli($s) {
   $c = "Gray"; if ($s -match "^\s*FAIL") { $c = "Red" } elseif ($s -match "^\s*WARN") { $c = "DarkYellow" } elseif ($s -match "^\s*PASS") { $c = "DarkGray" } elseif ($s -match "===") { $c = "Cyan" }
   L ("    " + $s) $c
 }
-if (-not (Have bash)) { L "    [!] bash (git-bash) PATH'te yok" "Yellow" }
+# v6.2: PATH'teki ilk "bash" WSL (System32\bash.exe) olabilir -> git-bash TAM yolu kullanilir
+$gbash = GitBash
+if (-not $gbash) { L "    [!] git-bash (Git\bin\bash.exe) bulunamadi" "Yellow" }
 elseif (Test-Path $inst) {
   # install.sh sonunda doctor'i KENDISI calistirir -> ayrica cagirmiyoruz (v6'da iki kez calisiyordu)
-  L "    install.sh + doctor calisiyor (~1 dk)..." "Yellow"
+  L ("    install.sh + doctor calisiyor (~1 dk)... bash: " + $gbash) "Yellow"
   $global:LASTEXITCODE = 0
-  $out = @(bash $inst --seed-memory 2>&1 | ForEach-Object { [string]$_ })
+  $out = @(& $gbash $inst --seed-memory 2>&1 | ForEach-Object { [string]$_ })
   $ic = $global:LASTEXITCODE
   $out | ForEach-Object { Renkli $_ }
   $docVar = [bool]($out | Where-Object { $_ -match "=== bsa doctor ===" })
-  if (-not $docVar -and (Test-Path $doc)) { L "    --- bsa doctor ---" "Cyan"; bash $doc 2>&1 | ForEach-Object { Renkli ([string]$_) } }
+  if (-not $docVar -and (Test-Path $doc)) { L "    --- bsa doctor ---" "Cyan"; & $gbash $doc 2>&1 | ForEach-Object { Renkli ([string]$_) } }
   $sonuc = $out | Where-Object { $_ -match "SONUC: PASS=" } | Select-Object -Last 1
   if ($ic -eq 0) { L "    altyapi kuruldu, doctor temiz" "Green" }
   elseif ($sonuc -match "FAIL=[1-9]") { L ("    altyapi kuruldu; doctor FAIL bulgusu var (kurulum hatasi DEGIL): " + $sonuc.Trim()) "Yellow" }
@@ -209,7 +221,8 @@ L ""
 L "==================================================" "Green"
 L "   KURULUM OZETI" "Green"
 L "==================================================" "Green"
-foreach ($c in @("git", "bash", "node", "npm", "gh", "jq")) { if (Have $c) { L ("  OK    " + $c) "Green" } else { L ("  EKSIK " + $c) "Red" } }
+foreach ($c in @("git", "node", "npm", "gh", "jq")) { if (Have $c) { L ("  OK    " + $c) "Green" } else { L ("  EKSIK " + $c) "Red" } }
+if (GitBash) { L ("  OK    git-bash (" + (GitBash) + ")") "Green" } else { L "  EKSIK git-bash" "Red" }
 if (ClaudeOk) { L "  OK    claude (calistirma testi)" "Green" }
 elseif (Have claude) { L "  EKSIK/ENGELLI claude (PATH'te var, calismiyor)" "Red" }
 else { L "  EKSIK claude" "Red" }
