@@ -20,6 +20,16 @@
           }
         ]
       }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"__BASH__\" \"__HOOKS_DIR__/pre-compact.sh\""
+          }
+        ]
+      }
     ]
   }
 }
