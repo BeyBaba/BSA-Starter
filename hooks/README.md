@@ -4,6 +4,7 @@
 |---|---|
 | `pre-bash-guard.sh` | PreToolUse (Bash\|PowerShell): komutu `rules.txt`'e göre tarar; eşleşme → exit 2 (engel). Parse hatasında fail-open. |
 | `pre-write-guard.sh` | PreToolUse (Write\|Edit): secret dosyaları (.env/*.pem/*.key/credentials) ve `supabase/migrations/` numara çakışması. |
+| `pre-compact.sh` | PreCompact (GLOBAL v3.2 CONTEXT-DRIFT): `trigger=auto` → `%USERPROFILE%/_reports/bigbrain/context-drift-log.md`'ye "CONTEXT-DRIFT IHLALI" satırı; `manual` → bilgi satırı. Asla bloklamaz. `BSA_REPORTS_DIR` ile log klasörü değiştirilebilir. |
 | `rules.txt` | `REGEX<TAB>L-no<TAB>mesaj<TAB>[TOOL]` — 4. sütun BASH/POWERSHELL/ANY (boş=ANY). |
 | `settings.snippet.json` | `~/.claude/settings.json`'a eklenen PreToolUse bağları (install.sh merge eder). |
 | `test-guards.sh` | Guard testleri (MATCH → 2, NOMATCH → 0). Her kural değişikliğinde çalıştır. |
