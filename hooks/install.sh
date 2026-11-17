@@ -193,12 +193,28 @@ for event, entries in snippet.get("hooks", {}).items():
         if hit is None:
             lst.append(entry); added += 1
             continue
-        # v3.2 tasima: mevcut girdi ciplak "bash ..." / eski yol ise komutu snippet'teki tam-yol bicimine guncelle
+        # v3.2 tasima: YALNIZ bizim kaliba uyan girdi guncellenir — ciplak "bash ..." ile baslayan ya da betigi
+        # bu kurulumun hooks klasorunu gosteren. Ayni adli ama baska yorumlayici/klasordeki KULLANICI hook'u korunur.
         new_cmds = {script_of(h["command"]): h["command"] for h in entry.get("hooks", []) if h.get("command")}
+        def ours(cmd):
+            try:
+                parts = shlex.split(cmd, posix=True)
+            except ValueError:
+                parts = cmd.split()
+            if not parts:
+                return False
+            exe = parts[0].replace("\\", "/").lower()
+            sdir = os.path.dirname(parts[-1].replace("\\", "/")).rstrip("/").lower()
+            return exe in ("bash", "bash.exe") or sdir == hooks_dir.replace("\\", "/").rstrip("/").lower()
         for h in hit.get("hooks", []):
-            want_cmd = new_cmds.get(script_of(h.get("command") or ""))
-            if want_cmd and h.get("command") != want_cmd:
+            cur = h.get("command") or ""
+            want_cmd = new_cmds.get(script_of(cur))
+            if not want_cmd or cur == want_cmd:
+                continue
+            if ours(cur):
                 h["command"] = want_cmd; migrated += 1
+            else:
+                print(f"[uyari] {event}: kullaniciya ait ayni adli hook korundu (tasinmadi): {cur}")
 
 new = json.dumps(settings, ensure_ascii=False, indent=2) + "\n"
 if added == 0 and migrated == 0 and new == raw:
