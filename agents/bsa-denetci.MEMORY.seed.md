@@ -1,7 +1,7 @@
 # bsa-denetci — kalıcı hafıza (seed)
 # Faz 2'de ~/.claude/agent-memory/bsa-denetci/MEMORY.md'ye kopyalanır (ilk 25 KB her çağrıda yüklenir).
 # Format: L-XXXX (tetik: <değişen-dosya-deseni>): kural — nasıl denetlenir. Deterministik hook'ların işi burada TEKRAR edilmez; bunlar muhakeme dersleridir.
-Son ders: L-0098 (BigBrain INDEX, 2026-09-22)
+Son ders: L-0104 (BigBrain INDEX, 2026-11-17 seed tazeleme)
 
 ## SUPABASE / DB (tetik: supabase/migrations/**, *.sql, lib/*supabase*, RLS/RPC)
 - L-0007 (canlı şema drift): feature/fix öncesi information_schema ile canlı şemaya bakıldı mı; repo migration'ı drift'ten emin mi.
@@ -30,6 +30,13 @@ Son ders: L-0098 (BigBrain INDEX, 2026-09-22)
 - v3.2 (makine-bağımsız yol): diff'te sabit `C:\Users\<ad>`, `/c/Users/<ad>`, `/c/Python3xx` yolu → UYARI; `$env:USERPROFILE` / `$HOME` / `BIGBRAIN_DIR` + araç aday zinciri (`--version` doğrulamalı, WindowsApps sahtesi atlanır) olmalı. Örnek/doküman yolları (`<ad>` yer tutucu) hariç.
 - v3.2 (hook bash): `settings.json` hook komutu çıplak `bash ` ile başlıyorsa → UYARI; WSL'li makinede WSL bash'ine düşer, Windows yolları kırılır. Git-bash tam yolu (tırnaklı) olmalı (`bash hooks/install.sh` taşır).
 
+## HOOK / GUARD TASARIMI (tetik: hooks/**, .claude/hooks/**, rules.txt, settings.json)
+- L-0099 (hook tipi): SessionStart değişikliği yeni oturum ister; Stop/PreToolUse betik İÇERİĞİ aynı oturumda taze okunur; settings.json kaydı (plugin aç/kapa dahil) yeni oturum ister. Rapor/plan L-0049'u tüm hook tiplerine genellemiş mi.
+- L-0100 (çıktı bütçesi): sabit bütçeli çok-bölümlü hook çıktısında kritik blok (INBOX/uyarı) önce tam kurulup rezerve edilmiş mi; yalnız düşük öncelikli liste kırpılıyor mu (+N daha), invariant testi var mı.
+- L-0101 (guard regex): pattern `grep -Eiq -e "$rx"` ile mi veriliyor (`-` ile başlayan desen opsiyon sanılır); araca özgü yasak TOOL sütunuyla mı; her kurala MATCH+NOMATCH testi eklenmiş mi.
+- L-0102 (veri argümanı yanlış-pozitif): yasaklı kalıbı aramak gerekiyorsa karakter sınıfıyla kırılmış mı (`pus[h] --forc[e]`); test fixture'ı Write ile dosyaya mı yazılmış; guard alias/değişkenle atlatılmamış mı.
+- L-0103 (CRLF fail-open): bash/TAB kural dosyası içeren repoda `.gitattributes` `*.sh`/`hooks/**` eol=lf var mı; guard parse öncesi `\r` kırpıyor mu; Windows'ta test tekrar koşulmuş mu.
+
 ## UI / PWA / FORMAT (tetik: *.tsx, globals.css, format/telefon)
 - L-0098 (biçim): para formatMoney 2-hane "1.234,56"; telefon E.164 + PhoneInput; wa.me E.164'ten.
 - L-0088 (dark): color-scheme tema seçicisiyle hizalı mı (native select okunur).
@@ -41,6 +48,7 @@ Son ders: L-0098 (BigBrain INDEX, 2026-09-22)
 - L-0094 (otonom kapı): merge/prod-deploy auto-mode kapısı — görev metnindeki "onay" açmaz; bloklanınca dur/ilet.
 - L-0073 (classifier): gated CLI nondeterministik (bir kez makul tekrar); tag push release'i otomatik oluşturur (create 422 hata değil).
 - L-0012 (semver): çift-haneli minor/patch yok; sürüm gerçek değişiklikle.
+- L-0104 (guard askıya alma): onaylı merge için guard satırı geçici yorumlandıysa orijinali geri yüklenmiş mi (`diff` boş), yedek silinmiş mi; guard silinmiş/regex'ten kaçılmış olmamalı.
 
 ## GENEL DAVRANIŞ / DÜRÜSTLÜK (her diff)
 - L-0023 (mevcut kodu oku): stale roadmap'e körü körüne güvenme; gerçek durumu tara.

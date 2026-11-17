@@ -74,7 +74,7 @@ say "python : $PY"
 # 1) Hook betikleri + rules.txt + test (LF normalize)
 say "--- 1) hook betikleri -> $CLAUDE_HOME/hooks"
 mkd "$CLAUDE_HOME/hooks"
-for f in pre-bash-guard.sh pre-write-guard.sh rules.txt test-guards.sh bsa-doctor.sh bsa.sh; do
+for f in pre-bash-guard.sh pre-write-guard.sh pre-compact.sh rules.txt test-guards.sh bsa-doctor.sh bsa.sh; do
   [ -f "$DIR/$f" ] || { say "[HATA] eksik kaynak: hooks/$f" >&2; exit 1; }
   copy_lf "$DIR/$f" "$CLAUDE_HOME/hooks/$f"
 done

@@ -60,7 +60,7 @@ command -v node >/dev/null 2>&1 && ok "node: $(node --version 2>&1)" || wrn "nod
 command -v claude >/dev/null 2>&1 && ok "claude CLI: $(claude --version 2>&1 | head -1)" || wrn "claude CLI PATH'te yok"
 
 echo "--- 2) hook dosyalari (dosyalar)"
-for f in pre-bash-guard.sh pre-write-guard.sh rules.txt test-guards.sh bsa-doctor.sh bsa.sh; do
+for f in pre-bash-guard.sh pre-write-guard.sh pre-compact.sh rules.txt test-guards.sh bsa-doctor.sh bsa.sh; do
   t="$CLAUDE_HOME/hooks/$f"
   if [ ! -f "$t" ]; then bad "eksik: $t (bash hooks/install.sh)"; drift dosyalar; continue; fi
   if [ -n "$ROOT" ] && [ -f "$ROOT/hooks/$f" ]; then
@@ -132,12 +132,20 @@ if windows:
                     print(f"WARN  {ev} hook komutu WSL bash'i gosteriyor: {cmd}")
                 elif exe.lower().endswith("bash.exe") and not exists(exe):
                     print(f"WARN  {ev} hook bash yolu yok: {exe}")
+# Kayitli olmasi beklenen diger global hook'lar (eksikse WARN; FAIL degil)
+optional = {"PreCompact": ("pre-compact.sh", "CONTEXT-DRIFT ihlali loglanmaz")}
+for ev, (script, why) in optional.items():
+    entries = s.get("hooks", {}).get(ev, [])
+    if any(script in (h.get("command") or "") for e in entries for h in e.get("hooks", [])):
+        print(f"PASS  {ev} -> {script} kayitli")
+    else:
+        print(f"WARN  {ev} hook'u kayitli degil: {script} ({why}; bash hooks/install.sh)")
 sys.exit(rc)
 PYEOF
   rc=$?
-  cat "$SOUT"; nw="$(grep -c "^WARN" "$SOUT")"; warn=$((warn+nw)); rm -f "$SOUT"
+  cat "$SOUT"; nw="$(grep -c "^WARN" "$SOUT")"; np="$(grep -c "^PASS" "$SOUT")"; warn=$((warn+nw)); rm -f "$SOUT"
   # python ciktisindaki PASS/FAIL satirlarini sayaca ekle (WARN satirlari yukarida sayildi)
-  if [ $rc -eq 0 ]; then pass=$((pass+2)); else fail=$((fail+1)); drift settings; fi
+  if [ $rc -eq 0 ]; then pass=$((pass+np)); else fail=$((fail+1)); drift settings; fi
 fi
 
 echo "--- 4) bsa-denetci ajani + hafiza (dosyalar, denetci-memory)"
