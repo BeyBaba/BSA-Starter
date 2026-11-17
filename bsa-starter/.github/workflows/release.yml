@@ -1,0 +1,44 @@
+name: Release
+
+# vX.Y.Z tag push'unda GitHub release olusturur (L-0073: sonra elle `gh release create` YAPMA).
+# Tag package.json surumuyle eslesmezse durur; notlar CHANGELOG.md'deki "## [X.Y.Z]" bolumunden alinir.
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tag package.json surumuyle eslesmeli
+        if: ${{ hashFiles('package.json') != '' }}
+        run: |
+          pkg="v$(node -p "require('./package.json').version")"
+          if [ "$pkg" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME, package.json $pkg ile eslesmiyor"; exit 1
+          fi
+      - name: CHANGELOG bolumunu cikar
+        run: |
+          ver="${GITHUB_REF_NAME#v}"
+          if [ -f CHANGELOG.md ]; then
+            awk -v h="## [$ver]" '
+              index($0, h) == 1 {on=1; next}
+              on && index($0, "## [") == 1 {exit}
+              on {print}
+            ' CHANGELOG.md > notes.md
+          fi
+          [ -s notes.md ] || echo "Bkz. CHANGELOG.md" > notes.md
+      - name: Release olustur (varsa dokunma)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            echo "Release zaten var: $GITHUB_REF_NAME"
+          else
+            gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md --verify-tag
+          fi

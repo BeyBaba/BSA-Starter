@@ -1,0 +1,4 @@
+# Workflow dosyalari her platformda LF (L-0103)
+.github/** text eol=lf
+*.yml text eol=lf
+*.sh text eol=lf

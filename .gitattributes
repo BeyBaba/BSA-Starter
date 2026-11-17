@@ -5,3 +5,6 @@
 hooks/** text eol=lf
 skills/** text eol=lf
 agents/** text eol=lf
+.github/** text eol=lf
+bsa-starter/.github/** text eol=lf
+*.yml text eol=lf
