@@ -39,8 +39,12 @@ MAKİNE BAĞIMSIZLIĞI (v3.2): Hiçbir komut/script/hook/talimat sabit kullanıc
 varsaymaz — PowerShell `$env:USERPROFILE`, bash `$HOME`/`BIGBRAIN_DIR`; araçlar PATH/aday zinciriyle bulunur; hedef klasör yoksa
 oluşturulur. Asistanın ÜRETTİĞİ komutlar da buna tabi.
 
+CONTEXT-DRIFT (v3.2): Uzun oturumda asistan her tur sonunda bağlam büyüklüğünü izler. Üç büyük iş bittiyse veya bağlam şişmeye
+başladıysa, otomatik sıkıştırma OLMADAN önce kendiliğinden devir notu (`.md`, kayıpsız: durum + bekleyenler + kurallar + sıradaki
+adım) üretir ve yeni oturum önerir. Kullanıcının fark etmesi beklenmez.
+
 v3.0 — yalnız çekirdek. Arşiv: GLOBAL_CLAUDE_MD.v2.23.archive.md. Eşleme: _reports\bigbrain\2026-09-22-global-v3-eslestirme.md. Kurulum/doğrulama: bash hooks/install.sh, bsa doctor.
 
 SÜRÜM GEÇMİŞİ: v3.2 (2026-11-17) — MAKİNE BAĞIMSIZLIĞI kuralı (sabit C:\Users\<ad> / /c/Python314 yok; hook'lar python aday
-zinciri, settings.json hook komutu git-bash tam yolu). v3.1 (2026-11-16) — bulut/telefon oturumu HAFIZA kuralı; şablon SessionStart hook'u BigBrain'i
+zinciri, settings.json hook komutu git-bash tam yolu) + CONTEXT-DRIFT kuralı (sıkıştırmadan önce kayıpsız devir notu). v3.1 (2026-11-16) — bulut/telefon oturumu HAFIZA kuralı; şablon SessionStart hook'u BigBrain'i
 yerelde arar, yoksa sparse klonlar, olmazsa "YUKLENEMEDI" der (önceden ders yokken de "yüklendi" diyordu; InsCleaner). v3.0 (2026-09-22) — v2.23 (418 satır) çekirdeğe indirildi; alan bilgisi skills/bsa-* (9), deterministik yasaklar hooks/rules.txt, diff muhakemesi agents/bsa-denetci.
