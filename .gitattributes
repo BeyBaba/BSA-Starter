@@ -8,3 +8,5 @@ agents/** text eol=lf
 .github/** text eol=lf
 bsa-starter/.github/** text eol=lf
 *.yml text eol=lf
+# bootstrap .bat dosyasi cmd.exe icin CRLF olmali (LF ile goto/label ve parantez bloklari bozulabilir)
+bootstrap/*.bat text eol=crlf
