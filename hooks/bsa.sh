@@ -12,11 +12,11 @@ CLAUDE_HOME="${CLAUDE_HOME:-$HOME/.claude}"
 find_root() { # BSA-Starter repo koku
   if [ -n "${BSA_STARTER_DIR:-}" ] && [ -d "$BSA_STARTER_DIR" ]; then echo "$BSA_STARTER_DIR"; return; fi
   if [ -f "$DIR/../GLOBAL_CLAUDE_MD.md" ]; then cd "$DIR/.." && pwd; return; fi
-  for c in "$HOME/Projects/BSA-Starter" /c/Users/BSA/Projects/BSA-Starter; do [ -d "$c" ] && { echo "$c"; return; }; done
+  for c in "$HOME/Projects/BSA-Starter" "${USERPROFILE:+$(cygpath -u "$USERPROFILE" 2>/dev/null)/Projects/BSA-Starter}"; do [ -d "$c" ] && { echo "$c"; return; }; done
 }
 find_bigbrain() {
   if [ -n "${BIGBRAIN_DIR:-}" ] && [ -d "$BIGBRAIN_DIR" ]; then echo "$BIGBRAIN_DIR"; return; fi
-  for c in "$HOME/Projects/BigBrain" /c/Users/BSA/Projects/BigBrain; do [ -d "$c" ] && { echo "$c"; return; }; done
+  for c in "$HOME/Projects/BigBrain" "${USERPROFILE:+$(cygpath -u "$USERPROFILE" 2>/dev/null)/Projects/BigBrain}"; do [ -d "$c" ] && { echo "$c"; return; }; done
 }
 pull_main() { # pull_main <repo>: yalniz main dalindaysa git pull origin main
   local repo="$1" name br

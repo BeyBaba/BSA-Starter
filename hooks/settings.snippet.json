@@ -1,5 +1,5 @@
 {
-  "_comment": "Faz 2: `bash hooks/install.sh` bu girdileri ~/.claude/settings.json'daki hooks nesnesine IDEMPOTENT ekler (C:/Users/BSA/.claude/hooks yolu kurulumda gercek CLAUDE_HOME ile degistirilir). Elle yapistirmak gerekmez; betikler ~/.claude/hooks/ altina rules.txt ile birlikte kopyalanir.",
+  "_comment": "v3.2: `bash hooks/install.sh` bu girdileri ~/.claude/settings.json'daki hooks nesnesine IDEMPOTENT ekler. __BASH__ kurulumda git-bash TAM yoluyla (WSL bash'ine dusmesin), __HOOKS_DIR__ gercek CLAUDE_HOME/hooks yoluyla degistirilir; sabit kullanici yolu yok. Mevcut ciplak 'bash ...' girdileri tam yola tasinir. Elle yapistirmak gerekmez.",
   "hooks": {
     "PreToolUse": [
       {
@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash C:/Users/BSA/.claude/hooks/pre-bash-guard.sh"
+            "command": "\"__BASH__\" \"__HOOKS_DIR__/pre-bash-guard.sh\""
           }
         ]
       },
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash C:/Users/BSA/.claude/hooks/pre-write-guard.sh"
+            "command": "\"__BASH__\" \"__HOOKS_DIR__/pre-write-guard.sh\""
           }
         ]
       }

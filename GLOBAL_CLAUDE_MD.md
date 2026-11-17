@@ -1,6 +1,6 @@
-GLOBAL CLAUDE.MD KURALLARI — v3.1 (çekirdek)
+GLOBAL CLAUDE.MD KURALLARI — v3.2 (çekirdek)
 
-SESSION: "Global CLAUDE.md v3.1 aktif" bildir. Bu dosya yalnız ÇEKİRDEK'tir: alan bilgisi skill'lerde,
+SESSION: "Global CLAUDE.md v3.2 aktif" bildir. Bu dosya yalnız ÇEKİRDEK'tir: alan bilgisi skill'lerde,
 deterministik yasaklar hook'ta, diff muhakemesi bsa-denetci'de. Kaynak tek yer: BSA-Starter/GLOBAL_CLAUDE_MD.md.
 
 KİMLİK/İLETİŞİM: Kullanıcı Savaş; TR-EN karışık, kısa/sesli olabilir; emin değilsen sor, tahmin etme.
@@ -35,7 +35,12 @@ Bulutta `_reports` yazılamaz: rapor kullanıcıya dosya olarak verilir. Global 
 ÇAKIŞMA/KURAL: Global vs proje çakışırsa DUR → UYAR → SOR. Kural değişikliği önce BSA-Starter'a PR (lokal ek yapma;
 lokal kopya senkronda silinir). Sürüm drift'i fark edilince bildir.
 
+MAKİNE BAĞIMSIZLIĞI (v3.2): Hiçbir komut/script/hook/talimat sabit kullanıcı veya makine yolu (C:\Users\<ad>, /c/Python314 vb.)
+varsaymaz — PowerShell `$env:USERPROFILE`, bash `$HOME`/`BIGBRAIN_DIR`; araçlar PATH/aday zinciriyle bulunur; hedef klasör yoksa
+oluşturulur. Asistanın ÜRETTİĞİ komutlar da buna tabi.
+
 v3.0 — yalnız çekirdek. Arşiv: GLOBAL_CLAUDE_MD.v2.23.archive.md. Eşleme: _reports\bigbrain\2026-09-22-global-v3-eslestirme.md. Kurulum/doğrulama: bash hooks/install.sh, bsa doctor.
 
-SÜRÜM GEÇMİŞİ: v3.1 (2026-11-16) — bulut/telefon oturumu HAFIZA kuralı; şablon SessionStart hook'u BigBrain'i
+SÜRÜM GEÇMİŞİ: v3.2 (2026-11-17) — MAKİNE BAĞIMSIZLIĞI kuralı (sabit C:\Users\<ad> / /c/Python314 yok; hook'lar python aday
+zinciri, settings.json hook komutu git-bash tam yolu). v3.1 (2026-11-16) — bulut/telefon oturumu HAFIZA kuralı; şablon SessionStart hook'u BigBrain'i
 yerelde arar, yoksa sparse klonlar, olmazsa "YUKLENEMEDI" der (önceden ders yokken de "yüklendi" diyordu; InsCleaner). v3.0 (2026-09-22) — v2.23 (418 satır) çekirdeğe indirildi; alan bilgisi skills/bsa-* (9), deterministik yasaklar hooks/rules.txt, diff muhakemesi agents/bsa-denetci.

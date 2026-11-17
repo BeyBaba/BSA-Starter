@@ -23,9 +23,9 @@ done
 ROOT=""
 if [ -f "$DIR/../GLOBAL_CLAUDE_MD.md" ]; then ROOT="$(cd "$DIR/.." && pwd)"
 elif [ -n "${BSA_STARTER_DIR:-}" ] && [ -d "$BSA_STARTER_DIR" ]; then ROOT="$BSA_STARTER_DIR"
-else for c in "$HOME/Projects/BSA-Starter" /c/Users/BSA/Projects/BSA-Starter; do [ -d "$c" ] && { ROOT="$c"; break; }; done; fi
+else for c in "$HOME/Projects/BSA-Starter" "${USERPROFILE:+$(cygpath -u "$USERPROFILE" 2>/dev/null)/Projects/BSA-Starter}"; do [ -d "$c" ] && { ROOT="$c"; break; }; done; fi
 BIGBRAIN="${BIGBRAIN_DIR:-}"
-[ -z "$BIGBRAIN" ] && for c in "$HOME/Projects/BigBrain" /c/Users/BSA/Projects/BigBrain; do [ -d "$c" ] && { BIGBRAIN="$c"; break; }; done
+[ -z "$BIGBRAIN" ] && for c in "$HOME/Projects/BigBrain" "${USERPROFILE:+$(cygpath -u "$USERPROFILE" 2>/dev/null)/Projects/BigBrain}"; do [ -d "$c" ] && { BIGBRAIN="$c"; break; }; done
 
 pass=0; fail=0; warn=0; DRIFT=""
 ok()   { echo "PASS  $*"; pass=$((pass+1)); }
@@ -41,7 +41,17 @@ echo "=== bsa doctor ==="
 echo "CLAUDE_HOME=$CLAUDE_HOME  repo=${ROOT:-<bulunamadi>}  BigBrain=${BIGBRAIN:-<bulunamadi>}  offline=$OFFLINE quick=$QUICK"
 
 echo "--- 1) on kosullar"
-PY=""; for c in /c/Python314/python python3 python; do "$c" --version >/dev/null 2>&1 && { PY="$c"; break; }; done
+# Python aday zinciri (v3.2 makine bagimsiz, L-0063): PATH python3/python -> LOCALAPPDATA Programs -> /c/Python3*; Store sahtesi atlanir
+pick_py() {
+  local la c IFS=$'\n'
+  la="${LOCALAPPDATA:-}"; [ -n "$la" ] && command -v cygpath >/dev/null 2>&1 && la="$(cygpath -u "$la")"; [ -n "$la" ] || la="$HOME/AppData/Local"
+  for c in $(type -ap python3 python 2>/dev/null) "$la"/Programs/Python/Python3*/python.exe /c/Python3*/python.exe; do
+    case "$c" in ""|*'*'*|*WindowsApps*) continue ;; esac
+    "$c" --version >/dev/null 2>&1 && { printf '%s\n' "$c"; return 0; }
+  done
+  return 1
+}
+PY="$(pick_py)"
 [ -n "$PY" ] && ok "python: $PY ($("$PY" --version 2>&1))" || bad "python yok — hook JSON parse fail-open olur, guard'lar CALISMAZ (L-0063)"
 if command -v jq >/dev/null 2>&1 && echo '""' | jq . >/dev/null 2>&1; then ok "jq: $(jq --version 2>&1)"; else wrn "jq yok (python fallback kullanilir; double-shot-latte plugin'i jq ister)"; fi
 command -v git >/dev/null 2>&1 && ok "git: $(git --version 2>&1)" || bad "git yok"
@@ -71,13 +81,24 @@ S="$CLAUDE_HOME/settings.json"
 if [ ! -f "$S" ]; then bad "settings.json yok: $S"; drift settings
 elif [ -z "$PY" ]; then wrn "python yok, settings.json dogrulanamadi"
 else
-  "$PY" - "$S" "$CLAUDE_HOME/hooks" <<'PYEOF'
-import json, sys, re, os
+  SOUT="$(mktemp)"
+  "$PY" - "$S" "$CLAUDE_HOME/hooks" > "$SOUT" <<'PYEOF'
+import json, sys, re, os, shlex, platform
 p, hooks_dir = sys.argv[1], sys.argv[2]
 try:
     s = json.load(open(p, encoding="utf-8"))
 except Exception as e:
     print(f"FAIL  settings.json gecersiz JSON: {e}"); sys.exit(2)
+windows = os.name == "nt" or platform.system().lower().startswith(("windows", "mingw", "msys", "cygwin"))
+def to_local(path):  # Git Bash: C:/x -> /c/x
+    return re.sub(r"^([A-Za-z]):/", lambda mm: "/" + mm.group(1).lower() + "/", path.replace("\\", "/"))
+def exists(path):
+    return os.path.exists(path) or os.path.exists(to_local(path))
+def split(cmd):
+    try:
+        return shlex.split(cmd, posix=True)
+    except ValueError:
+        return cmd.split()
 pre = s.get("hooks", {}).get("PreToolUse", [])
 need = {"pre-bash-guard.sh": "Bash|PowerShell", "pre-write-guard.sh": "Write|Edit"}
 rc = 0
@@ -89,18 +110,33 @@ for script, matcher in need.items():
     if e.get("matcher") != matcher:
         print(f"FAIL  {script} matcher '{e.get('matcher')}' (beklenen '{matcher}')"); rc = 2; continue
     cmd = next(h.get("command") for h in e["hooks"] if script in (h.get("command") or ""))
-    m = re.search(r"bash\s+(.+?)\s*$", cmd)
-    path = (m.group(1) if m else cmd).strip('"')
-    # Git Bash: C:/x -> /c/x
-    alt = re.sub(r"^([A-Za-z]):/", lambda mm: "/" + mm.group(1).lower() + "/", path)
-    if os.path.exists(path) or os.path.exists(alt):
+    parts = split(cmd)
+    path = parts[-1] if parts else cmd
+    if exists(path):
         print(f"PASS  PreToolUse {matcher} -> {cmd}")
     else:
         print(f"FAIL  hook komut yolu yok: {cmd}"); rc = 2
+# v3.2: Windows'ta hook komutu git-bash TAM yoluyla baslamali (ciplak "bash" WSL bash'ine dusebilir)
+if windows:
+    for ev, entries in s.get("hooks", {}).items():
+        for e in entries:
+            for h in e.get("hooks", []):
+                cmd = h.get("command") or ""
+                parts = split(cmd)
+                if not parts or not parts[-1].endswith(".sh"):
+                    continue
+                exe = parts[0].replace("\\", "/")
+                if exe.lower() in ("bash", "bash.exe"):
+                    print(f"WARN  {ev} hook komutu ciplak 'bash' ile basliyor (WSL riski; bash hooks/install.sh tam yola tasir): {cmd}")
+                elif exe.lower().endswith("bash.exe") and re.search(r"/windows/system32/", exe.lower()):
+                    print(f"WARN  {ev} hook komutu WSL bash'i gosteriyor: {cmd}")
+                elif exe.lower().endswith("bash.exe") and not exists(exe):
+                    print(f"WARN  {ev} hook bash yolu yok: {exe}")
 sys.exit(rc)
 PYEOF
   rc=$?
-  # python ciktisindaki PASS/FAIL satirlarini sayaca ekle
+  cat "$SOUT"; nw="$(grep -c "^WARN" "$SOUT")"; warn=$((warn+nw)); rm -f "$SOUT"
+  # python ciktisindaki PASS/FAIL satirlarini sayaca ekle (WARN satirlari yukarida sayildi)
   if [ $rc -eq 0 ]; then pass=$((pass+2)); else fail=$((fail+1)); drift settings; fi
 fi
 

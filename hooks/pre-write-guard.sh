@@ -7,7 +7,17 @@
 # CR dayanikliligi: file_path sonundaki \r atilir.
 input="$(cat)"
 
-pick_py() { for c in /c/Python314/python python3 python; do "$c" --version >/dev/null 2>&1 && { echo "$c"; return; }; done; }
+# Python aday zinciri (v3.2 makine bagimsiz, L-0063): PATH python3 -> PATH python -> %LOCALAPPDATA%\Programs\Python\Python3* -> /c/Python3*
+# WindowsApps Store sahtesi atlanir; her aday --version ile dogrulanir. Sabit kullanici/surum yolu YOK.
+pick_py() {
+  local la c IFS=$'\n'
+  la="${LOCALAPPDATA:-}"; [ -n "$la" ] && command -v cygpath >/dev/null 2>&1 && la="$(cygpath -u "$la")"; [ -n "$la" ] || la="$HOME/AppData/Local"
+  for c in $(type -ap python3 python 2>/dev/null) "$la"/Programs/Python/Python3*/python.exe /c/Python3*/python.exe; do
+    case "$c" in ""|*'*'*|*WindowsApps*) continue ;; esac
+    "$c" --version >/dev/null 2>&1 && { printf '%s\n' "$c"; return 0; }
+  done
+  return 1
+}
 PY="$(pick_py)"
 
 fp=""

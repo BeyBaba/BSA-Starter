@@ -1,10 +1,18 @@
 #!/bin/bash
 # Guard testleri: her kural icin eslesen (exit 2 beklenir) + eslesmeyen (exit 0) sahte JSON.
-# JSON'u python ile guvenli kur (jq/tirnak tuzagi yok). python: /c/Python314/python -> python3 -> python (L-0063 stub).
+# JSON'u python ile guvenli kur (jq/tirnak tuzagi yok). python: pick_py aday zinciri (v3.2, L-0063 stub atlanir).
 # Hafiza v3 faz 2: L-0011 inbox istisnasi (sahte git repolari) + L-0093 UUID guard'i (content parametresi).
 DIR="$(cd "$(dirname "$0")" && pwd)"
-PY=""
-for c in /c/Python314/python python3 python; do "$c" --version >/dev/null 2>&1 && { PY="$c"; break; }; done
+pick_py() {
+  local la c IFS=$'\n'
+  la="${LOCALAPPDATA:-}"; [ -n "$la" ] && command -v cygpath >/dev/null 2>&1 && la="$(cygpath -u "$la")"; [ -n "$la" ] || la="$HOME/AppData/Local"
+  for c in $(type -ap python3 python 2>/dev/null) "$la"/Programs/Python/Python3*/python.exe /c/Python3*/python.exe; do
+    case "$c" in ""|*'*'*|*WindowsApps*) continue ;; esac
+    "$c" --version >/dev/null 2>&1 && { printf '%s\n' "$c"; return 0; }
+  done
+  return 1
+}
+PY="$(pick_py)"
 [ -z "$PY" ] && { echo "python bulunamadi"; exit 1; }
 
 pass=0; fail=0
@@ -81,7 +89,7 @@ runb "plain-ls NOMATCH"       0 Bash       "ls -la src"
 
 echo ""
 echo "=== pre-bash-guard L-0011 inbox istisnasi (sahte git repolari) ==="
-GDIR="$(mktemp -d 2>/dev/null || echo C:/Users/BSA/AppData/Local/Temp/gtest.$$)"
+GDIR="$(mktemp -d 2>/dev/null || echo "${TMPDIR:-${TEMP:-/tmp}}/gtest.$$")"
 mkrepo "$GDIR/a/BigBrain"          "lessons/inbox/2026-09-22-x-slug.md"
 mkrepo "$GDIR/b/BigBrain"          "lessons/INDEX.md"
 mkrepo "$GDIR/c/arya-life-reborn"  "lessons/inbox/x.md"
@@ -97,7 +105,7 @@ runw "write-pem MATCH"        2 Write      "C:/proj/key.pem"
 runw "write-normal NOMATCH"   0 Write      "C:/proj/src/app/page.tsx"
 
 # Migration cakismasi testi (gecici klasor)
-TDIR="$(mktemp -d 2>/dev/null || echo C:/Users/BSA/AppData/Local/Temp/mtest.$$)"
+TDIR="$(mktemp -d 2>/dev/null || echo "${TMPDIR:-${TEMP:-/tmp}}/mtest.$$")"
 mkdir -p "$TDIR/supabase/migrations"
 printf 'x' > "$TDIR/supabase/migrations/0035_existing.sql"
 runw "migration-collision MATCH" 2 Write   "$TDIR/supabase/migrations/0035_new_name.sql"

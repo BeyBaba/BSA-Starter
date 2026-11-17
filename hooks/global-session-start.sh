@@ -14,7 +14,24 @@ fi
 export BSA_DOCTOR_LINE
 # --- BSA doctor END
 
-/c/Python314/python - << 'PYEOF'
+# Python aday zinciri (v3.2 makine bagimsiz, L-0063): eskiden /c/Python314/python yedeksizdi -> baska makinede hook kiriliyordu
+pick_py() {
+  local la c IFS=$'\n'
+  la="${LOCALAPPDATA:-}"; [ -n "$la" ] && command -v cygpath >/dev/null 2>&1 && la="$(cygpath -u "$la")"; [ -n "$la" ] || la="$HOME/AppData/Local"
+  for c in $(type -ap python3 python 2>/dev/null) "$la"/Programs/Python/Python3*/python.exe /c/Python3*/python.exe; do
+    case "$c" in ""|*'*'*|*WindowsApps*) continue ;; esac
+    "$c" --version >/dev/null 2>&1 && { printf '%s\n' "$c"; return 0; }
+  done
+  return 1
+}
+PY="$(pick_py)"
+if [ -z "$PY" ]; then
+  # Sessiz cokme YASAK (v3.1): gorunur uyari
+  printf '%s\n' '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"UYARI: BigBrain hafizasi YUKLENEMEDI - gercek python bulunamadi (pick_py: PATH python3/python, LOCALAPPDATA Programs, /c/Python3*). Kullaniciya bildir."}}'
+  exit 0
+fi
+
+"$PY" - << 'PYEOF'
 import sys, os, json, unicodedata, glob, re
 
 BIGBRAIN = "C:/Users/BSA/Projects/BigBrain"

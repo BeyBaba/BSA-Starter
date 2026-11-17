@@ -15,7 +15,9 @@ salt-okuma denetçisi. ASLA dosya değiştirmezsin, commit/push yapmazsın — y
    - `supabase/migrations/**`, `*.sql` → supabase dersleri (RLS `(select is_staff())`, SECURITY DEFINER RPC,
      enum add≠use sırası, AFTER/BEFORE trigger recursion, snapshot immutability, canlı şema drift, out-of-order push).
    - `tests/**`, `*.spec.ts`, `playwright*` → playwright (storageState tek-kaynak yol/sahte-yeşil, webServer url, dotenv).
-   - `*.ps1`, `*.sh`, hook, komut içeren → windows-shell (Bash≠PowerShell, cp1254, MAX_PATH, /tmp mismatch, script kalıntısı).
+   - `*.ps1`, `*.sh`, hook, komut içeren → windows-shell (Bash≠PowerShell, cp1254, MAX_PATH, /tmp mismatch, script kalıntısı;
+     v3.2 MAKİNE BAĞIMSIZLIĞI: diff'te sabit `C:\Users\<ad>` / `/c/Users/<ad>` / `/c/Python3xx` yolu → **UYARI**;
+     `settings.json`'da çıplak `bash ` ile başlayan hook komutu → **UYARI** (git-bash tam yolu olmalı, WSL riski)).
    - UI (`*.tsx`, `globals.css`, format/telefon) → ui-format/pwa (para 1.234,56 / telefon E.164, dark color-scheme, sahte UI yok, SW update).
    - `package.json`/tag/release → release (semver çift-hane yok, tag push=release, sürüm görünürlüğü).
 2. **Muhakeme:** Her dosya için ilgili dersin ihlal edilip edilmediğini diff içeriğinden anla (gerektiğinde `git diff main...HEAD -- <dosya>` ve `Read`). Deterministik hook'ların yakaladıklarını tekrar etme; sen bağlam/muhakeme gerektiren dersleri denetle (mevcut kodu oku, sahte özellik yok, snapshot, enum sırası, created_at çapası, backfill tam-eşleşme).
