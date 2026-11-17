@@ -1,6 +1,6 @@
-GLOBAL CLAUDE.MD KURALLARI — v3.2 (çekirdek)
+GLOBAL CLAUDE.MD KURALLARI — v3.3 (çekirdek)
 
-SESSION: "Global CLAUDE.md v3.2 aktif" bildir. Bu dosya yalnız ÇEKİRDEK'tir: alan bilgisi skill'lerde,
+SESSION: "Global CLAUDE.md v3.3 aktif" bildir. Bu dosya yalnız ÇEKİRDEK'tir: alan bilgisi skill'lerde,
 deterministik yasaklar hook'ta, diff muhakemesi bsa-denetci'de. Kaynak tek yer: BSA-Starter/GLOBAL_CLAUDE_MD.md.
 
 KİMLİK/İLETİŞİM: Kullanıcı Savaş; TR-EN karışık, kısa/sesli olabilir; emin değilsen sor, tahmin etme.
@@ -42,9 +42,10 @@ oluşturulur. Asistanın ÜRETTİĞİ komutlar da buna tabi.
 CONTEXT-DRIFT (v3.2): Uzun oturumda asistan her tur sonunda bağlam büyüklüğünü izler. Üç büyük iş bittiyse veya bağlam şişmeye
 başladıysa, otomatik sıkıştırma OLMADAN önce kendiliğinden devir notu (`.md`, kayıpsız: durum + bekleyenler + kurallar + sıradaki
 adım) üretir ve yeni oturum önerir. Kullanıcının fark etmesi beklenmez.
+**Devir notu kapanışı (v3.3):** Her devir notu en sonda `## ▶ YENİ OTURUM BURADAN BAŞLAR` bloğuyla biter: (1) tek cümle durum, (2) sıradaki tek adım, (3) gerekiyorsa çalıştırılacak komut / indirilecek dosya. Kullanıcı yeni oturumda yalnızca notu ekler; "oku" / "kaldığımız yerden devam" yazması gerekmez. Asistan eklenen devir notunu görünce otomatik okur ve bu bloktan devam eder. Not her güncellendiğinde blok yeniden yazılır (tek blok, en sonda). Tüm oturum ve makinelerde geçerlidir.
 
 v3.0 — yalnız çekirdek. Arşiv: GLOBAL_CLAUDE_MD.v2.23.archive.md. Eşleme: _reports\bigbrain\2026-09-22-global-v3-eslestirme.md. Kurulum/doğrulama: bash hooks/install.sh, bsa doctor.
 
-SÜRÜM GEÇMİŞİ: v3.2 (2026-11-17) — MAKİNE BAĞIMSIZLIĞI kuralı (sabit C:\Users\<ad> / /c/Python314 yok; hook'lar python aday
+SÜRÜM GEÇMİŞİ: v3.3 (2026-11-18) — CONTEXT-DRIFT altına "Devir notu kapanışı": her devir notu tek "▶ YENİ OTURUM BURADAN BAŞLAR" bloğuyla biter; kullanıcı yalnız notu ekler, asistan otomatik devam eder. v3.2 (2026-11-17) — MAKİNE BAĞIMSIZLIĞI kuralı (sabit C:\Users\<ad> / /c/Python314 yok; hook'lar python aday
 zinciri, settings.json hook komutu git-bash tam yolu) + CONTEXT-DRIFT kuralı (sıkıştırmadan önce kayıpsız devir notu). v3.1 (2026-11-16) — bulut/telefon oturumu HAFIZA kuralı; şablon SessionStart hook'u BigBrain'i
 yerelde arar, yoksa sparse klonlar, olmazsa "YUKLENEMEDI" der (önceden ders yokken de "yüklendi" diyordu; InsCleaner). v3.0 (2026-09-22) — v2.23 (418 satır) çekirdeğe indirildi; alan bilgisi skills/bsa-* (9), deterministik yasaklar hooks/rules.txt, diff muhakemesi agents/bsa-denetci.

@@ -6,13 +6,35 @@
 # 2026-09-22: proje-ozel dersler + son 8 + inbox sayaci; proje CLAUDE.md kopyasi kaldirildi (Claude Code zaten yukluyor).
 # 2026-09-22 (Hafiza v3): surum ~/.claude/CLAUDE.md ilk satirindan dinamik okunur; bsa-doctor tek satir ozeti basliga eklenir.
 
+# 2026-11-17 (v3.2 makine bagimsiz): sabit C:/Users/BSA yollari kaldirildi. BigBrain sablon hook'la ayni sirayla aranir:
+#   $BIGBRAIN_DIR -> proje klasoru (BigBrain'in kendisi) -> ../BigBrain -> $HOME/Projects/BigBrain -> %USERPROFILE%/Projects/BigBrain
+#   -> ~/.cache/bigbrain (sablon hook'un bulut klonu). Bulunamazsa gorunur "YUKLENEMEDI" (asla sahte "yuklendi" yok).
+#   Global kural kopyasi: ${CLAUDE_HOME:-$HOME/.claude}/CLAUDE.md
+CLAUDE_HOME="${CLAUDE_HOME:-$HOME/.claude}"
+
 # --- BSA doctor (Hafiza v3) BEGIN — install.sh tam dosyayi kopyalar; elle ekleme icin blok global-session-start.snippet.sh
 BSA_DOCTOR_LINE="${BSA_DOCTOR_LINE:-}"
-if [ -f "$HOME/.claude/hooks/bsa-doctor.sh" ]; then
-  BSA_DOCTOR_LINE="$(bash "$HOME/.claude/hooks/bsa-doctor.sh" --offline --quick 2>/dev/null | tail -n 1)"
+if [ -f "$CLAUDE_HOME/hooks/bsa-doctor.sh" ]; then
+  BSA_DOCTOR_LINE="$(bash "$CLAUDE_HOME/hooks/bsa-doctor.sh" --offline --quick 2>/dev/null | tail -n 1)"
 fi
 export BSA_DOCTOR_LINE
 # --- BSA doctor END
+
+# Windows-native python MSYS yolunu (/c/...) acamaz -> C:/... bicimine cevir
+to_native() { if command -v cygpath >/dev/null 2>&1; then cygpath -m "$1"; else printf '%s\n' "$1"; fi; }
+find_bigbrain() {
+  local d proj up=""
+  proj="${CLAUDE_PROJECT_DIR:-$PWD}"
+  [ -n "${USERPROFILE:-}" ] && command -v cygpath >/dev/null 2>&1 && up="$(cygpath -u "$USERPROFILE")"
+  for d in "${BIGBRAIN_DIR:-}" "$proj" "$proj/../BigBrain" "$proj/../bigbrain" "$HOME/Projects/BigBrain" ${up:+"$up/Projects/BigBrain"} "${BIGBRAIN_CACHE:-$HOME/.cache/bigbrain}"; do
+    [ -n "$d" ] && [ -f "$d/lessons/INDEX.md" ] && { (cd "$d" && pwd); return 0; }
+  done
+  return 1
+}
+BB="$(find_bigbrain)"
+BSA_BIGBRAIN=""; [ -n "$BB" ] && BSA_BIGBRAIN="$(to_native "$BB")"
+BSA_GLOBAL_MD="$(to_native "$CLAUDE_HOME/CLAUDE.md")"
+export BSA_BIGBRAIN BSA_GLOBAL_MD
 
 # Python aday zinciri (v3.2 makine bagimsiz, L-0063): eskiden /c/Python314/python yedeksizdi -> baska makinede hook kiriliyordu
 pick_py() {
@@ -34,10 +56,10 @@ fi
 "$PY" - << 'PYEOF'
 import sys, os, json, unicodedata, glob, re
 
-BIGBRAIN = "C:/Users/BSA/Projects/BigBrain"
+BIGBRAIN = os.environ.get("BSA_BIGBRAIN", "")   # bash find_bigbrain sonucu (bos = bulunamadi)
 lessons_path = os.path.join(BIGBRAIN, "lessons", "INDEX.md")
 inbox_glob = os.path.join(BIGBRAIN, "lessons", "inbox", "*.md")
-global_claude_md = "C:/Users/BSA/.claude/CLAUDE.md"
+global_claude_md = os.environ.get("BSA_GLOBAL_MD") or os.path.join(os.path.expanduser("~"), ".claude", "CLAUDE.md")
 
 proj = os.path.basename((os.environ.get("CLAUDE_PROJECT_DIR") or os.getcwd()).rstrip("/\\"))
 
@@ -72,6 +94,11 @@ if os.path.exists(cwd_claude):
 
 if bsa_scope_false:
     context = "[WARNING] BSA_SCOPE=false: lesson list skipped for this project."
+elif not BIGBRAIN or not os.path.isfile(lessons_path):
+    # Sessiz bos liste YASAK (v3.1/v3.2): eskiden sabit yol bulunamayinca "yok" diye sahte-temiz gorunuyordu
+    context = ("Global CLAUDE.md v%s active. UYARI: BigBrain hafizasi YUKLENEMEDI - lessons/INDEX.md bulunamadi "
+               "(arandi: BIGBRAIN_DIR, proje, ../BigBrain, ~/Projects/BigBrain, %%USERPROFILE%%/Projects/BigBrain, ~/.cache/bigbrain). "
+               "Kullaniciya bildir; BIGBRAIN_DIR ayarla veya BigBrain'i ~/Projects altina klonla." % global_version())
 else:
     headers = []        # tum ## L- basliklari (ascii)
     proj_headers = []   # blogu bu projeyi anan dersler

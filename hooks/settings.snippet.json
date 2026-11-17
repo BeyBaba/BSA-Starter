@@ -21,6 +21,26 @@
         ]
       }
     ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"__BASH__\" \"__HOOKS_DIR__/global-session-start.sh\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"__BASH__\" \"__HOOKS_DIR__/global-session-end.sh\""
+          }
+        ]
+      }
+    ],
     "PreCompact": [
       {
         "hooks": [
